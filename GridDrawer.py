@@ -3,6 +3,9 @@ from pyglet.gl import GL_LINES, GL_QUADS
 
 class GridDrawer:
     def __init__(self, line_width, spacing, data):
+        if line_width <= 0: raise ValueError(f"Invalid line_width: {line_width}")
+        if spacing <= 0: raise ValueError(f"Invalid spacing: {spacing}")
+
         self.window = pyglet.window.Window()
         self.width, self.height = self.window.get_size()
 

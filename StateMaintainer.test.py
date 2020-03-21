@@ -82,5 +82,63 @@ class TestStateMaintainer(unittest.TestCase):
         }
         self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
 
+
+    def test_rule_with_misshapen_indices_1(self):
+        test_rule = {
+            'indices': [
+                (1, 2),
+                [3, 4, 5],
+                (6)
+            ],
+            'ruleset': GAME_OF_LIFE['ruleset']
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_misshapen_indices_2(self):
+        test_rule = {
+            'indices': [
+                (1, 2, 3),
+                (4, 5, 6),
+                (7, 8, 9)
+            ],
+            'ruleset': GAME_OF_LIFE['ruleset']
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_misshapen_indices_3(self):
+        test_rule = {
+            'indices': [
+                (
+                    (1, -2),
+                    (10, 20)
+                ),
+                (
+                    (3, 4, 5),
+                    (-30, 40)
+                ),
+                (
+                    (6, -7, 8, 9),
+                    (60, 70)
+                )
+            ],
+            'ruleset': GAME_OF_LIFE['ruleset']
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_wrong_data_type_for_indices(self):
+        test_rule = {
+            'indices': [
+                [1.2, 4.0],
+                [-7.3, 9.1],
+                [2.21, -3.42]
+            ],
+            'ruleset': GAME_OF_LIFE['ruleset']
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
 if __name__ == '__main__':
     unittest.main()

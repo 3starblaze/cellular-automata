@@ -2,8 +2,9 @@ import numpy as np
 
 
 class StateMaintainer:
-    def __init__(self, data):
+    def __init__(self, data, rules):
         self.data = data
+        self.rules = rules
 
 
     @property
@@ -18,3 +19,14 @@ class StateMaintainer:
             raise ValueError("data expected in 2 dimensions; got {temp_data.ndim}")
 
         self._data = temp_data
+
+
+    @property
+    def rules(self):
+        return self.rules
+
+    @rules.setter
+    def rules(self, value):
+        if value == {}:
+            raise ValueError("rules is empty!")
+        self._rules = value

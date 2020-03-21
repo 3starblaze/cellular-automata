@@ -27,6 +27,6 @@ class StateMaintainer:
 
     @rules.setter
     def rules(self, value):
-        if value == {}:
-            raise ValueError("rules is empty!")
+        if not ('indices' in value and 'ruleset' in value):
+            raise ValueError("'rules' is missing 'indices' and/or 'ruleset'!")
         self._rules = value

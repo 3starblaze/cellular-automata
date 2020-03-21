@@ -59,5 +59,28 @@ class TestStateMaintainer(unittest.TestCase):
         self.assertRaises(ValueError, StateMaintainer, VALID_DATA, {})
 
 
+    def test_rule_with_invalid_keys(self):
+        test_rule = {
+            'banana': [(4, 2), (1, 2)],
+            'carrot': lambda x: x - 1
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_valid_indices_but_missing_ruleset(self):
+        test_rule = {
+            'indices': GAME_OF_LIFE['indices'],
+            'carrot': lambda x: x - 1
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_valid_ruleset_but_missing_indices(self):
+        test_rule = {
+            'banana': [(4, 2), (1, 2)],
+            'ruleset': GAME_OF_LIFE['ruleset']
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
 if __name__ == '__main__':
     unittest.main()

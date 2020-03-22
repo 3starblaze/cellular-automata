@@ -194,5 +194,33 @@ class TestStateMaintainer(unittest.TestCase):
         self.assertEqual(received_rule, expected_rule)
 
 
+    def test_apply_rules(self):
+        current_state = StateMaintainer(VALID_DATA, GAME_OF_LIFE)
+        current_state.apply_rules()
+
+        self.assertTrue(np.array_equal(
+            current_state.data,
+            [[False, False, False],
+             [False,  True, False],
+             [False, False, False]]))
+
+
+    def test_apply_rules_2(self):
+        current_state = StateMaintainer(
+            [[1, 1, 0, 0],
+             [1, 0, 0, 0],
+             [0, 0, 1, 1],
+             [0, 0, 1, 0]],
+            GAME_OF_LIFE)
+        current_state.apply_rules()
+
+        self.assertTrue(np.array_equal(
+            current_state.data,
+            [[1, 1, 0, 0],
+             [1, 0, 1, 0],
+             [0, 1, 1, 1],
+             [0, 0, 1, 1]]))
+
+
 if __name__ == '__main__':
     unittest.main()

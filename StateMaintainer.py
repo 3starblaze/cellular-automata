@@ -47,3 +47,31 @@ class StateMaintainer:
             'indices': value['indices'],
             'ruleset': value['ruleset']
         }
+
+
+    def apply_rules(self):
+        def relative_to_absolute_coord(cur_x, cur_y):
+            return [(cur_x + xi, cur_y + yi) for xi, yi in self.rules['indices']]
+
+
+        def coordinates_in_bounds(x, y):
+            if min(x, y) < 0: return False
+            if x >= self.data.shape[0]: return False
+            if y >= self.data.shape[1]: return False
+            return True
+
+
+        new_data = np.zeros(self.data.shape)
+        it = np.nditer(self.data, flags=['multi_index'])
+        while not it.finished:
+            values_from_coords = []
+            for xi, yi in relative_to_absolute_coord(*it.multi_index):
+                if not coordinates_in_bounds(xi, yi):
+                    values_from_coords.append(False)
+                else:
+                    values_from_coords.append(self.data[xi, yi])
+
+            new_data[it.multi_index] = self.rules['ruleset'](it[0], values_from_coords)
+            it.iternext()
+
+        self.data = new_data

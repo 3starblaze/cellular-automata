@@ -23,7 +23,7 @@ class StateMaintainer:
 
     @property
     def rules(self):
-        return self.rules
+        return self._rules
 
     @rules.setter
     def rules(self, value):
@@ -43,4 +43,7 @@ class StateMaintainer:
         except TypeError:
             raise ValueError("Ruleset doesn't accept 2 arguments!")
 
-        self._rules = value
+        self._rules = {
+            'indices': value['indices'],
+            'ruleset': value['ruleset']
+        }

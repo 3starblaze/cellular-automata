@@ -1,4 +1,5 @@
 import unittest
+import copy
 
 from StateMaintainer import StateMaintainer
 
@@ -162,6 +163,20 @@ class TestStateMaintainer(unittest.TestCase):
             'ruleset': lambda x, y, z: x + y + z
         }
         self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_extra_data(self):
+        test_rule = copy.deepcopy(GAME_OF_LIFE)
+        test_rule['extra1'] = 'junk'
+        test_rule['extra2'] = [0, 0, 7]
+
+        # Converting 'indices' to normal lists because of numpy's '=='
+        received_rule = StateMaintainer(VALID_DATA, test_rule).rules
+        received_rule['indices'] = received_rule['indices'].tolist()
+        expected_rule = StateMaintainer(VALID_DATA, GAME_OF_LIFE).rules
+        expected_rule['indices'] = expected_rule['indices'].tolist()
+
+        self.assertEqual(received_rule, expected_rule)
 
 
 if __name__ == '__main__':

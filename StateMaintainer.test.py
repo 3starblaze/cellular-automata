@@ -5,9 +5,9 @@ from StateMaintainer import StateMaintainer
 
 def GAME_OF_LIFE_RULESET(cell, values):
     if cell:
-        return values.sum() >= 2 and values.sum() <= 3
+        return sum(values) >= 2 and sum(values) <= 3
     else:
-        return values.sum() == 3
+        return sum(values) == 3
 
 
 # One of the valid rules
@@ -136,6 +136,30 @@ class TestStateMaintainer(unittest.TestCase):
                 [2.21, -3.42]
             ],
             'ruleset': GAME_OF_LIFE['ruleset']
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_wrong_data_type_for_rulesest(self):
+        test_rule = {
+            'indices': GAME_OF_LIFE['indices'],
+            'ruleset': 'fun'
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_wrong_ruleset_with_1_parameter(self):
+        test_rule = {
+            'indices': GAME_OF_LIFE['indices'],
+            'ruleset': lambda x: x
+        }
+        self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
+
+
+    def test_rule_with_correct_ruleset_with_3_parameters(self):
+        test_rule = {
+            'indices': GAME_OF_LIFE['indices'],
+            'ruleset': lambda x, y, z: x + y + z
         }
         self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
 

@@ -36,4 +36,11 @@ class StateMaintainer:
         if value['indices'].dtype != 'int64':
             raise ValueError("Invalid data type for 'indices'")
 
+        if not callable(value['ruleset']):
+            raise ValueError("Ruleset is not callable!")
+        try:
+            value['ruleset'](True, [False, True, True])
+        except TypeError:
+            raise ValueError("Ruleset doesn't accept 2 arguments!")
+
         self._rules = value

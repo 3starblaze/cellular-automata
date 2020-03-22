@@ -1,6 +1,8 @@
 import unittest
 import copy
 
+import numpy as np
+
 from StateMaintainer import StateMaintainer
 
 
@@ -26,6 +28,11 @@ VALID_DATA = [[False, False, True],
 
 class TestStateMaintainer(unittest.TestCase):
     # 'data' argument tests
+    def test_data_getter(self):
+        received_data = StateMaintainer(VALID_DATA, GAME_OF_LIFE).data.tolist()
+        self.assertEqual(received_data, VALID_DATA)
+
+
     def test_incorrectly_shaped_1d_input(self):
         self.assertRaises(ValueError, StateMaintainer,
                           [False, False, True, False, True, True],
@@ -49,6 +56,14 @@ class TestStateMaintainer(unittest.TestCase):
 
 
     # 'rules' argument tests
+    def test_rules_getter(self):
+        received_rules = StateMaintainer(VALID_DATA, GAME_OF_LIFE).rules
+        received_rules['indices'] = received_rules['indices'].tolist()
+        expected_rules = copy.deepcopy(GAME_OF_LIFE)
+        expected_rules['indices'] = np.array(expected_rules['indices']).tolist()
+        self.assertEqual(received_rules, expected_rules)
+
+
     def test_correct_rule(self):
         try:
             StateMaintainer(VALID_DATA, GAME_OF_LIFE)

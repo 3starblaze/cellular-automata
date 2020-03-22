@@ -9,7 +9,7 @@ class StateMaintainer:
 
     @property
     def data(self):
-        return self.data
+        return self._data
 
 
     @data.setter

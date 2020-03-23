@@ -17,15 +17,21 @@ class GridDrawer:
 
     def draw_grid(self):
         # Horizontal lines
-        for i in range(self.line_width//2, self.height, self.spacing):
-            pyglet.graphics.draw(2, GL_LINES,
-                                 ('v2i', (0, i, self.width, i)),
-                                 ('c3B', (0, 100, 100) * 2))
+        for i in range(0, self.height, self.spacing):
+            pyglet.graphics.draw(4, GL_QUADS,
+                                 ('v2i', (0, i,
+                                          0, i + self.line_width,
+                                          self.width, i + self.line_width,
+                                          self.width, i)),
+                                 ('c3B', (0, 100, 100) * 4))
         # Vertical lines
-        for i in range(self.line_width//2, self.width, self.spacing):
-            pyglet.graphics.draw(2, GL_LINES,
-                                 ('v2i', (i, 0, i, self.height)),
-                                 ('c3B', (0, 100, 100) * 2))
+        for i in range(0, self.width, self.spacing):
+            pyglet.graphics.draw(4, GL_QUADS,
+                                 ('v2i', (i, 0,
+                                          i, self.height,
+                                          i + self.line_width, self.height,
+                                          i + self.line_width, 0)),
+                                 ('c3B', (0, 100, 100) * 4))
 
 
     def draw_cells(self):

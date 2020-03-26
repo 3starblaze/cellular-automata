@@ -1,5 +1,5 @@
 import pyglet
-from pyglet.gl import GL_LINES, GL_QUADS
+from pyglet.gl import GL_QUADS
 
 
 class GridDrawer:

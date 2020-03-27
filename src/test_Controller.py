@@ -2,7 +2,7 @@ import unittest
 
 from Controller import Controller
 from StateMaintainer import StateMaintainer
-from StateMaintainerTest import VALID_DATA, GAME_OF_LIFE
+from test_StateMaintainer import VALID_DATA, GAME_OF_LIFE
 
 VALID_STATE_MAINTAINER = StateMaintainer(VALID_DATA, GAME_OF_LIFE)
 

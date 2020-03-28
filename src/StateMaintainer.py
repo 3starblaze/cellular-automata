@@ -24,8 +24,9 @@ class StateMaintainer:
 
     @rules.setter
     def rules(self, value):
-        if not ("indices" in value and "ruleset" in value):
-            raise ValueError("'rules' is missing 'indices' and/or 'ruleset'!")
+        # indices
+        if not "indices" in value:
+            raise ValueError("'rules' is missing 'indices'!")
         value["indices"] = np.array(value["indices"])
 
         if value["indices"].ndim != 2 or value["indices"].shape[1] != 2:
@@ -33,6 +34,9 @@ class StateMaintainer:
         if value["indices"].dtype != "int64":
             raise ValueError("Invalid data type for 'indices'")
 
+        # ruleset
+        if not "ruleset" in value:
+            raise ValueError("'rules' is missing 'ruleset'!")
         if not callable(value["ruleset"]):
             raise ValueError("Ruleset is not callable!")
         try:

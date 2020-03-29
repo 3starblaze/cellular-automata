@@ -2,7 +2,18 @@ import numpy as np
 
 
 class StateMaintainer:
+    """Store 2d cell data and apply rule functions to data."""
+
     def __init__(self, data, rules):
+        """
+        :param data: 2d data, that can be converted to 2d np.array
+        :param rules: object with keys "indices" and "rules"
+            :param indices: n by 2 integer 2d array where each each element
+                represents index, relative to origin cell
+            :param ruleset: function (or callable) that takes 2 arguments:
+                original cell value and cell value list (with same length as
+                'indices') and which returns a new cell value.
+        """
         self.data = data
         self.rules = rules
 

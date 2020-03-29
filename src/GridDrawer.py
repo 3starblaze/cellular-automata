@@ -18,13 +18,19 @@ class GridDrawer:
         grid_cell_color=(114, 109, 168),
     ):
         """
-        :param line_width: grid line width in pixels
-        :param spacing: space between adjacent grid line starting sides
-        NOT between lines themselves
-        :param data: 2d data, that can be converted to 2d np.array
-        :param grid_line_color: grid line color in 3 element RGB tuple
-        :param grid_cell_color: grid cell(ones that represent data) color in 3
-        element RGB tuple
+        Parameters
+        ----------
+        line_width : int
+            Grid line width in px.
+        spacing : int
+            Space between line midpoints (not lines themselves) in px.
+        data : array_like
+            2-D array of values that will be drawn by GridDrawer.
+        grid_line_color: tuple of ints, optional
+             Grid line color in 3 element RGB tuple.
+        grid_cell_color: tuple of ints, optional
+             Color of cells in 3 element RGB tuple that are represented by
+             `true` in data.
         """
         if line_width <= 0:
             raise ValueError(f"Invalid line_width: {line_width}")

@@ -6,13 +6,22 @@ class StateMaintainer:
 
     def __init__(self, data, rules):
         """
-        :param data: 2d data, that can be converted to 2d np.array
-        :param rules: object with keys "indices" and "rules"
-            :param indices: n by 2 integer 2d array where each each element
-                represents index, relative to origin cell
-            :param ruleset: function (or callable) that takes 2 arguments:
-                original cell value and cell value list (with same length as
-                'indices') and which returns a new cell value.
+        Parameters
+        ----------
+        data : array_like
+            Grid with cell values. Must be 2-D.
+        rules : object
+            indices : array_like
+                List of relative indices that will be retrieved in rule applying
+                process. Must be 2-D with shape of (_, 2).
+            ruleset : function
+                Parameters
+                ----------
+                cell : bool
+                    Value of the selected cell.
+                retrieved_cells : array_like
+                    Array of bools, representing cell values retrieved using
+                    `indices` array. Same 1-D size as `indices`.
         """
         self.data = data
         self.rules = rules

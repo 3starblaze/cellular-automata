@@ -3,6 +3,12 @@ from pyglet.gl import GL_QUADS
 
 
 class GridDrawer:
+    """Draw 2d data in a grid.
+
+    Accepts data and different arguments for customizing the appearance of the grid.
+    Grid is drawn by using pyglet + openGL.
+    """
+
     def __init__(
         self,
         line_width,
@@ -11,6 +17,15 @@ class GridDrawer:
         grid_line_color=(0, 100, 100),
         grid_cell_color=(114, 109, 168),
     ):
+        """
+        :param line_width: grid line width in pixels
+        :param spacing: space between adjacent grid line starting sides
+        NOT between lines themselves
+        :param data: 2d data, that can be converted to 2d np.array
+        :param grid_line_color: grid line color in 3 element RGB tuple
+        :param grid_cell_color: grid cell(ones that represent data) color in 3
+        element RGB tuple
+        """
         if line_width <= 0:
             raise ValueError(f"Invalid line_width: {line_width}")
         if spacing <= 0:

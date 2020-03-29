@@ -3,11 +3,7 @@ from pyglet.gl import GL_QUADS
 
 
 class GridDrawer:
-    """Draw 2d data in a grid.
-
-    Accepts data and different arguments for customizing the appearance of the grid.
-    Grid is drawn by using pyglet + openGL.
-    """
+    """Draw 2-D data in a grid."""
 
     def __init__(
         self,

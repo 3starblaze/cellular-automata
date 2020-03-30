@@ -22,6 +22,11 @@ class StateMaintainer:
                 retrieved_cells : array_like
                     Array of bools, representing cell values retrieved using
                     `indices` array. Same 1-D size as `indices`.
+
+                Returns
+                -------
+                bool
+                    Final value of the cell after applying a rule.
         """
         self.data = data
         self.rules = rules

@@ -72,6 +72,8 @@ class StateMaintainer:
         self._rules = {"indices": value["indices"], "ruleset": value["ruleset"]}
 
     def apply_rules(self):
+        """Use ruleset function on data and update data."""
+
         def relative_to_absolute_coord(cur_x, cur_y):
             return [(cur_x + xi, cur_y + yi) for xi, yi in self.rules["indices"]]
 

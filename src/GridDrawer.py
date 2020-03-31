@@ -1,7 +1,3 @@
-import pyglet
-from pyglet.gl import GL_QUADS
-
-
 class GridDrawer:
     """Draw 2-D data in a grid."""
 
@@ -49,58 +45,28 @@ class GridDrawer:
         ):
             raise ValueError(f"Invalid grid_cell_color format: {grid_cell_color}")
 
-        self.window = pyglet.window.Window()
-        self.width, self.height = self.window.get_size()
-
         self.line_width = line_width
-        pyglet.gl.glLineWidth(self.line_width)
         self.spacing = spacing
         self.data = data
 
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
 
-    def draw_grid(self):
+    def draw_grid(self, width, height):
+        grid_lines = []
         # Horizontal lines
-        for i in range(0, self.height, self.spacing):
-            pyglet.graphics.draw(
-                4,
-                GL_QUADS,
-                (
-                    "v2i",
-                    (
-                        0,
-                        i,
-                        0,
-                        i + self.line_width,
-                        self.width,
-                        i + self.line_width,
-                        self.width,
-                        i,
-                    ),
-                ),
-                ("c3B", self.grid_line_color * 4),
+        for i in range(0, height, self.spacing):
+            grid_lines.append(
+                (0, i, 0, i + self.line_width, width, i + self.line_width, width, i,)
             )
+
         # Vertical lines
-        for i in range(0, self.width, self.spacing):
-            pyglet.graphics.draw(
-                4,
-                GL_QUADS,
-                (
-                    "v2i",
-                    (
-                        i,
-                        0,
-                        i,
-                        self.height,
-                        i + self.line_width,
-                        self.height,
-                        i + self.line_width,
-                        0,
-                    ),
-                ),
-                ("c3B", self.grid_line_color * 4),
+        for i in range(0, width, self.spacing):
+            grid_lines.append(
+                (i, 0, i, height, i + self.line_width, height, i + self.line_width, 0,)
             )
+
+        return {"lines": grid_lines, "color": self.grid_line_color}
 
     def draw_cells(self):
         starting_points = []
@@ -109,6 +75,7 @@ class GridDrawer:
                 if elem:
                     starting_points.append((j, i))
 
+        cell_blocks = []
         for x, y in starting_points:
             cell_size = self.spacing - self.line_width
             point1 = (
@@ -118,17 +85,7 @@ class GridDrawer:
             point2 = (point1[0] + cell_size, point1[1])
             point3 = (point2[0], point2[1] + cell_size)
             point4 = (point3[0] - cell_size, point3[1])
-            pyglet.graphics.draw(
-                4,
-                GL_QUADS,
-                ("v2i", (*point1, *point2, *point3, *point4)),
-                ("c3B", self.grid_cell_color * 4),
-            )
 
-    def start(self):
-        @self.window.event
-        def on_draw():
-            self.draw_grid()
-            self.draw_cells()
+            cell_blocks.append((*point1, *point2, *point3, *point4))
 
-        pyglet.app.run()
+        return {"cell_blocks": cell_blocks, "color": self.grid_cell_color}

@@ -66,7 +66,7 @@ class GridDrawer:
                 (i, 0, i, height, i + self.line_width, height, i + self.line_width, 0,)
             )
 
-        return {"lines": grid_lines, "color": self.grid_line_color}
+        return grid_lines
 
     def draw_cells(self):
         starting_points = []
@@ -88,4 +88,4 @@ class GridDrawer:
 
             cell_blocks.append((*point1, *point2, *point3, *point4))
 
-        return {"cell_blocks": cell_blocks, "color": self.grid_cell_color}
+        return cell_blocks

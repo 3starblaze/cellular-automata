@@ -24,33 +24,67 @@ class GridDrawer:
              Color of cells in 3 element RGB tuple that are represented by
              `true` in data.
         """
-        if line_width <= 0:
-            raise ValueError(f"Invalid line_width: {line_width}")
-        if spacing <= 0:
-            raise ValueError(f"Invalid spacing: {spacing}")
-        if (
-            not isinstance(grid_line_color, tuple)
-            or len(grid_line_color) != 3
-            or min(grid_line_color) < 0
-            or max(grid_line_color) > 255
-            or any(x % 1 != 0 for x in grid_line_color)
-        ):
-            raise ValueError(f"Invalid grid_line_color format: {grid_line_color}")
-        if (
-            not isinstance(grid_cell_color, tuple)
-            or len(grid_cell_color) != 3
-            or min(grid_cell_color) < 0
-            or max(grid_cell_color) > 255
-            or any(x % 1 != 0 for x in grid_cell_color)
-        ):
-            raise ValueError(f"Invalid grid_cell_color format: {grid_cell_color}")
-
         self.line_width = line_width
         self.spacing = spacing
         self.data = data
-
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
+
+    @property
+    def line_width(self):
+        return _line_width
+
+    @line_width.setter
+    def line_width(self, value):
+        if value <= 0:
+            raise ValueError(f"Invalid line_width: {value}")
+        else:
+            self._line_width = value
+
+    @property
+    def spacing(self):
+        return _spacing
+
+    @spacing.setter
+    def spacing(self, value):
+        if value <= 0:
+            raise ValueError(f"Invalid spacing: {value}")
+        else:
+            self._spacing = value
+
+    @property
+    def grid_line_color(self):
+        return self._grid_line_color
+
+    @grid_line_color.setter
+    def grid_line_color(self, value):
+        if (
+            not isinstance(value, tuple)
+            or len(value) != 3
+            or min(value) < 0
+            or max(value) > 255
+            or any(x % 1 != 0 for x in value)
+        ):
+            raise ValueError(f"Invalid grid_line_color format: {value}")
+        else:
+            self._grid_line_color = value
+
+    @property
+    def grid_cell_color(self):
+        return self._grid_cell_color
+
+    @grid_cell_color.setter
+    def grid_cell_color(self, value):
+        if (
+            not isinstance(value, tuple)
+            or len(value) != 3
+            or min(value) < 0
+            or max(value) > 255
+            or any(x % 1 != 0 for x in value)
+        ):
+            raise ValueError(f"Invalid grid_cell_color format: {value}")
+        else:
+            self._grid_cell_color = value
 
     def draw_grid(self, width, height):
         grid_lines = []

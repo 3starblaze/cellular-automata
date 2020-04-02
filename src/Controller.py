@@ -18,7 +18,7 @@ class Controller:
             raise ValueError("iterations is not positive!")
 
         try:
-            if callable(Drawer.draw_grid) and callable(Drawer.draw_cells):
+            if not callable(Drawer.draw_grid) or not callable(Drawer.draw_cells):
                 raise ValueError()
         except (ValueError, AttributeError) as e:
             raise ValueError(

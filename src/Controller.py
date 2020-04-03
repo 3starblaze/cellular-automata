@@ -7,17 +7,9 @@ from StateMaintainer import StateMaintainer
 
 
 class Controller:
-    def __init__(self, State, Drawer, iterations):
+    def __init__(self, State, Drawer):
         if not issubclass(type(State), StateMaintainer):
             raise ValueError("State is not an instance of StateMaintainer!")
-
-        try:
-            if iterations != int(iterations):
-                raise ValueError()
-        except ValueError:
-            raise ValueError("iterations is not an integer")
-        if iterations <= 0:
-            raise ValueError("iterations is not positive!")
 
         try:
             if not callable(Drawer.draw_grid) or not callable(Drawer.draw_cells):
@@ -28,7 +20,6 @@ class Controller:
             )
 
         self.State = State
-        self.iterations = iterations
 
         self.window = pyglet.window.Window()
 

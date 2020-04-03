@@ -1,4 +1,5 @@
 from StateMaintainer import StateMaintainer
+from GridDrawer import GridDrawer
 from Controller import Controller
 
 my_list = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 0, 0], [0, 0, 0]]
@@ -18,4 +19,6 @@ GAME_OF_LIFE = {
 
 
 MyState = StateMaintainer(my_list, GAME_OF_LIFE)
-Controller(MyState, 10).run()
+MyDrawer = GridDrawer(2, 30, MyState.data)
+MyController = Controller(MyState, MyDrawer, 10)
+MyController.run()

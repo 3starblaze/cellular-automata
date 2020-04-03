@@ -32,7 +32,7 @@ class GridDrawer:
 
     @property
     def line_width(self):
-        return _line_width
+        return self._line_width
 
     @line_width.setter
     def line_width(self, value):
@@ -43,7 +43,7 @@ class GridDrawer:
 
     @property
     def spacing(self):
-        return _spacing
+        return self._spacing
 
     @spacing.setter
     def spacing(self, value):

@@ -1,4 +1,5 @@
 import pyglet
+from pyglet.gl import GL_QUADS
 
 from GridDrawer import GridDrawer
 from StateMaintainer import StateMaintainer
@@ -29,8 +30,27 @@ class Controller:
         self.iterations = iterations
 
         # TODO Attach events that:
-        # draw grid
         # allow changing states while pushing keys
+
+        self.window = pyglet.window.Window()
+
+        @self.window.event
+        def on_draw():
+            self.window.clear()
+            for line_tuple in Drawer.draw_grid(*self.window.get_size()):
+                pyglet.graphics.draw(
+                    4,
+                    GL_QUADS,
+                    ("v2i", line_tuple),
+                    ("c3B", Drawer.grid_line_color * 4),
+                )
+            for cell_block in Drawer.draw_cells():
+                pyglet.graphics.draw(
+                    4,
+                    GL_QUADS,
+                    ("v2i", cell_block),
+                    ("c3B", Drawer.grid_cell_color * 4),
+                )
 
     def run(self):
         pyglet.app.run()

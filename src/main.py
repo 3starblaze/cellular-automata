@@ -6,7 +6,7 @@ my_list = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 0, 0], [0, 0, 0]]
 
 
 def GAME_OF_LIFE_RULESET(cell, values):
-    if not cell:
+    if cell:
         return sum(values) >= 2 and sum(values) <= 3
     else:
         return sum(values) == 3

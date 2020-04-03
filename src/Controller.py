@@ -1,4 +1,5 @@
 import pyglet
+from pyglet.window import key
 from pyglet.gl import GL_QUADS
 
 from GridDrawer import GridDrawer
@@ -29,9 +30,6 @@ class Controller:
         self.State = State
         self.iterations = iterations
 
-        # TODO Attach events that:
-        # allow changing states while pushing keys
-
         self.window = pyglet.window.Window()
 
         @self.window.event
@@ -51,6 +49,12 @@ class Controller:
                     ("v2i", cell_block),
                     ("c3B", Drawer.grid_cell_color * 4),
                 )
+
+        @self.window.event
+        def on_key_press(symbol, modifiers):
+            if symbol == key.RIGHT:
+                State.apply_rules()
+                Drawer.data = State.data
 
     def run(self):
         pyglet.app.run()

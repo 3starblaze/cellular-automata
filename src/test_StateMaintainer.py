@@ -129,6 +129,16 @@ class TestStateMaintainer(unittest.TestCase):
         }
         self.assertRaises(ValueError, StateMaintainer, VALID_DATA, test_rule)
 
+    def test_rule_with_ruleset_that_operates_on_explicit_indices(self):
+        test_rule = {
+            "indices": GAME_OF_LIFE["indices"],
+            "ruleset": lambda cell, values: values[6],
+        }
+        try:
+            StateMaintainer(VALID_DATA, test_rule)
+        except ValueError:
+            self.fail("Rule that operates on indices raises an exception!")
+
     def test_rule_with_extra_data(self):
         test_rule = copy.deepcopy(GAME_OF_LIFE)
         test_rule["extra1"] = "junk"

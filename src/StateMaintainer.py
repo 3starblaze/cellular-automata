@@ -65,7 +65,7 @@ class StateMaintainer:
         if not callable(value["ruleset"]):
             raise ValueError("Ruleset is not callable!")
         try:
-            value["ruleset"](True, [False, True, True])
+            value["ruleset"](True, [True] * len(value["indices"]))
         except TypeError:
             raise ValueError("Ruleset doesn't accept 2 arguments!")
 

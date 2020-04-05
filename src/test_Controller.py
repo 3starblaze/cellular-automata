@@ -6,7 +6,7 @@ from StateMaintainer import StateMaintainer
 from test_StateMaintainer import VALID_DATA, GAME_OF_LIFE
 
 VALID_STATE_MAINTAINER = StateMaintainer(VALID_DATA, GAME_OF_LIFE)
-VALID_GRID_DRAWER = GridDrawer(2, 10, [])
+VALID_GRID_DRAWER = GridDrawer(2, 10, [[0, 0, 1], [0, 1, 0], [1, 0, 0]])
 
 
 class TestController(unittest.TestCase):

@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class GridDrawer:
     """Draw 2-D data in a grid."""
 
@@ -51,6 +54,18 @@ class GridDrawer:
             raise ValueError(f"Invalid spacing: {value}")
         else:
             self._spacing = value
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, value):
+        temp_data = np.array(value)
+        if temp_data.ndim != 2:
+            raise ValueError("data expected in 2 dimensions; got {temp_data.ndim}")
+
+        self._data = temp_data.T
 
     @property
     def grid_line_color(self):

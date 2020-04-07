@@ -2,6 +2,10 @@
 
 A place to mess around with cellular automata
 
+## Table of Contents
+* **[Installation](#installation)**
+* **[Quickstart](#quickstart)**
+
 ## Installation
 
 1. Clone this repository

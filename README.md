@@ -105,5 +105,15 @@ Launch it!
 ```sh
 python3 example.py
 ```
+![](./README-assets/example-1.png)
 
+Now there's a bunch of colored (and uncolored) squares. Colored ones represent alive cells, uncolored - dead cells.
+
+To advance your simulation, press right arrow ➡️!
+![](./README-assets/example-2.png)
+
+Keep in mind that just because you don't see some cells, doesn't mean they don't exist. Observe the right side. There's an empty column and this column won't be updated. There are also few invisible cells that go up.
+
+
+And that's about it. I know that's not much, but it's something. New features will await.
 

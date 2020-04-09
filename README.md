@@ -42,13 +42,13 @@ Starting your project is easy.
 
     1. Data
     
-        For this example we're going to make a 10x10 grid with random values.
+        For this example we're going to make a 20x20 grid with random values.
 
         ```python
         import numpy as np
         import random
 
-        my_list = np.array([random.choice([1, 0]) for i in range(10**2)]).reshape(10, 10)
+        my_list = np.array([random.choice([1, 0]) for i in range(20**2)]).reshape(20, 20)
         ```
 
     2. Ruleset

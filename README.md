@@ -83,37 +83,37 @@ Starting your project is easy.
         ``` python
         MyState = StateMaintainer(my_list, {"indices": indices, "ruleset": GAME_OF_LIFE_RULESET})
         ```
+4. Stick together all this data
 
-And right before seeing cellular automation in action, we have to configure it a
-bit. `GridDrawer` is responsible for drawing... grids. It takes line width,
-spacing and data (also grid line and cell color).
+    And right before seeing cellular automation in action, we have to configure it a
+    bit. `GridDrawer` is responsible for drawing... grids. It takes line width,
+    spacing and data (also grid line and cell color).
 
-``` python
-MyDrawer = GridDrawer(1, 30, MyState.data)
-```
+    ``` python
+    MyDrawer = GridDrawer(1, 30, MyState.data)
+    ```
 
-And finally we pass MyState and MyDrawer to the Controller.
+    And finally we pass MyState and MyDrawer to the Controller.
 
-``` python
-Controller(MyState, MyDrawer).run()
-```
+    ``` python
+    Controller(MyState, MyDrawer).run()
+    ```
+5. Launch it!
+
+    Great! We're done writing and now it's time to observe!
+
+    ```sh
+    python3 example.py
+    ```
+    ![](./README-assets/example-1.png)
+
+    Now there's a bunch of colored (and uncolored) squares. Colored ones represent alive cells, uncolored - dead cells.
+
+    To advance your simulation, press right arrow ➡️!
+    ![](./README-assets/example-2.png)
+
+    Keep in mind that just because you don't see some cells, doesn't mean they don't exist. Observe the right side. There's             an empty column and this column won't be updated. There are also few invisible cells that go up.
 
 
-Great! We're done writing and now it's time to observe!
-
-Launch it!
-```sh
-python3 example.py
-```
-![](./README-assets/example-1.png)
-
-Now there's a bunch of colored (and uncolored) squares. Colored ones represent alive cells, uncolored - dead cells.
-
-To advance your simulation, press right arrow ➡️!
-![](./README-assets/example-2.png)
-
-Keep in mind that just because you don't see some cells, doesn't mean they don't exist. Observe the right side. There's an empty column and this column won't be updated. There are also few invisible cells that go up.
-
-
-And that's about it. I know that's not much, but it's something. New features will await.
+    And that's about it. I know that's not much, but it's something. New features will await.
 

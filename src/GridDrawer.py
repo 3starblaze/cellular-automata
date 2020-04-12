@@ -4,7 +4,7 @@ class GridDrawer:
     def __init__(
         self,
         line_width,
-        spacing,
+        cell_size,
         data,
         grid_line_color=(0, 100, 100),
         grid_cell_color=(114, 109, 168),
@@ -14,8 +14,8 @@ class GridDrawer:
         ----------
         line_width : int
             Grid line width in px.
-        spacing : int
-            Space between line midpoints (not lines themselves) in px.
+        cell_size : int
+            Cell size in px.
         data : array_like
             2-D array of values that will be drawn by GridDrawer.
         grid_line_color: tuple of ints, optional
@@ -25,7 +25,7 @@ class GridDrawer:
              `true` in data.
         """
         self.line_width = line_width
-        self.spacing = spacing
+        self.cell_size = cell_size
         self.data = data
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
@@ -42,15 +42,15 @@ class GridDrawer:
             self._line_width = value
 
     @property
-    def spacing(self):
-        return self._spacing
+    def cell_size(self):
+        return self._cell_size
 
-    @spacing.setter
-    def spacing(self, value):
+    @cell_size.setter
+    def cell_size(self, value):
         if value <= 0:
-            raise ValueError(f"Invalid spacing: {value}")
+            raise ValueError(f"Invalid cell_size: {value}")
         else:
-            self._spacing = value
+            self._cell_size = value
 
     @property
     def grid_line_color(self):
@@ -89,15 +89,15 @@ class GridDrawer:
     def draw_grid(self, width, height):
         grid_lines = []
         # Horizontal lines
-        for i in range(0, height, self.spacing):
+        for i in range(0, height, self.cell_size + self.line_width):
             grid_lines.append(
-                (0, i, 0, i + self.line_width, width, i + self.line_width, width, i,)
+                (0, i, 0, i + self.line_width, width, i + self.line_width, width, i)
             )
 
         # Vertical lines
-        for i in range(0, width, self.spacing):
+        for i in range(0, width, self.cell_size + self.line_width):
             grid_lines.append(
-                (i, 0, i, height, i + self.line_width, height, i + self.line_width, 0,)
+                (i, 0, i, height, i + self.line_width, height, i + self.line_width, 0)
             )
 
         return grid_lines

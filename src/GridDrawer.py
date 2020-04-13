@@ -111,14 +111,13 @@ class GridDrawer:
 
         cell_blocks = []
         for x, y in starting_points:
-            cell_size = self.spacing - self.line_width
             point1 = (
-                self.line_width * (x + 1) + cell_size * x,
-                self.line_width * (y + 1) + cell_size * y,
+                self.line_width * (x + 1) + self.cell_size * x,
+                self.line_width * (y + 1) + self.cell_size * y,
             )
-            point2 = (point1[0] + cell_size, point1[1])
-            point3 = (point2[0], point2[1] + cell_size)
-            point4 = (point3[0] - cell_size, point3[1])
+            point2 = (point1[0] + self.cell_size, point1[1])
+            point3 = (point2[0], point2[1] + self.cell_size)
+            point4 = (point3[0] - self.cell_size, point3[1])
 
             cell_blocks.append((*point1, *point2, *point3, *point4))
 

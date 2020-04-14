@@ -15,13 +15,13 @@ class TestGridDrawer(unittest.TestCase):
     def test_0_line_width(self):
         self.assertRaisesRegex(ValueError, "line_width", GridDrawer, 0, 10, [])
 
-    def test_negative_spacing(self):
+    def test_negative_cell_size(self):
         self.assertRaisesRegex(
-            ValueError, "spacing", GridDrawer, 2, random.randint(-100, -1), []
+            ValueError, "cell_size", GridDrawer, 2, random.randint(-100, -1), []
         )
 
-    def test_0_spacing(self):
-        self.assertRaisesRegex(ValueError, "spacing", GridDrawer, 2, 0, [])
+    def test_0_cell_size(self):
+        self.assertRaisesRegex(ValueError, "cell_size", GridDrawer, 2, 0, [])
 
     def test_incorect_color_format(self):
         self.assertRaisesRegex(

@@ -1,6 +1,8 @@
 import unittest
 import random
 
+import numpy as np
+
 from GridDrawer import GridDrawer
 
 VALID_COLOR = (0, 100, 200)
@@ -74,6 +76,32 @@ class TestGridDrawer(unittest.TestCase):
             [],
             VALID_COLOR,
             (43.92, 123.45, 92.2),
+        )
+
+    def test_random_line_count(self):
+        cell_size = random.randint(1, 100)
+        line_width = random.randint(1, 10)
+        TestDrawer = GridDrawer(line_width, cell_size, [])
+
+        grid_size = (random.randint(100, 1000), random.randint(100, 1000))
+        self.assertEqual(
+            len(TestDrawer.draw_grid(*grid_size)),
+            (1 + (grid_size[0] - 1) // (line_width + cell_size))
+            + (1 + (grid_size[1] - 1) // (line_width + cell_size)),
+        )
+
+    def test_random_cell_count(self):
+        size = (random.randint(100, 1000), random.randint(100, 1000))
+        data = [random.choice([1, 0]) for _ in range(size[0] * size[1])]
+        data = np.array(data).reshape(*size)
+        valid_cell_count = data.sum()
+
+        cell_size = random.randint(1, 100)
+        line_width = random.randint(1, 10)
+        TestDrawer = GridDrawer(line_width, cell_size, data)
+        self.assertEqual(
+            len(TestDrawer.draw_cells()),
+            valid_cell_count
         )
 
 

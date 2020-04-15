@@ -31,6 +31,40 @@ class TestGridDrawer(unittest.TestCase):
     def test_0_cell_size(self):
         self.assertRaisesRegex(ValueError, "cell_size", GridDrawer, 2, 0, [])
 
+    def test_data_getter(self):
+        received_data = GridDrawer(2, 10, VALID_DATA).data.tolist()
+        self.assertEqual(received_data, VALID_DATA)
+
+    def test_incorrectly_shaped_1d_input(self):
+        self.assertRaisesRegex(
+            ValueError,
+            "data",
+            GridDrawer,
+            2,
+            10,
+            [False, False, True, False, True, True],
+        )
+
+    def test_correctly_shaped_2d_input(self):
+        try:
+            GridDrawer(
+                2,
+                10,
+                [[True, False, False], [False, True, False], [False, False, True]],
+            )
+        except ValueError:
+            self.fail("Correctly shapped array raises an exception!")
+
+    def test_incorrectly_shaped_3d_input(self):
+        self.assertRaisesRegex(
+            ValueError,
+            "data",
+            GridDrawer,
+            2,
+            10,
+            [[[False, False]], [[True, False]], [[True, True]]],
+        )
+
     def test_incorect_color_format(self):
         self.assertRaisesRegex(
             ValueError, "color format", GridDrawer, 2, 10, VALID_DATA, "skrrr"
@@ -93,7 +127,7 @@ class TestGridDrawer(unittest.TestCase):
     def test_random_line_count(self):
         cell_size = random.randint(1, 100)
         line_width = random.randint(1, 10)
-        TestDrawer = GridDrawer(line_width, cell_size, [])
+        TestDrawer = GridDrawer(line_width, cell_size, VALID_DATA)
 
         grid_size = (random.randint(100, 1000), random.randint(100, 1000))
         self.assertEqual(
@@ -111,10 +145,7 @@ class TestGridDrawer(unittest.TestCase):
         cell_size = random.randint(1, 100)
         line_width = random.randint(1, 10)
         TestDrawer = GridDrawer(line_width, cell_size, data)
-        self.assertEqual(
-            len(TestDrawer.draw_cells()),
-            valid_cell_count
-        )
+        self.assertEqual(len(TestDrawer.draw_cells()), valid_cell_count)
 
 
 if __name__ == "__main__":

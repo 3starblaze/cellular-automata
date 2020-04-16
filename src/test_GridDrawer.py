@@ -21,7 +21,15 @@ class TestGridDrawer(unittest.TestCase):
         )
 
     def test_0_line_width(self):
-        self.assertRaisesRegex(ValueError, "line_width", GridDrawer, 0, 10, VALID_DATA)
+        try:
+            GridDrawer(0, 10, VALID_DATA)
+        except ValueError:
+            self.fail("0 line width raises an exception!")
+
+    def test_0_line_width_ensure_no_lines(self):
+        width, height = random.randint(100, 1000), random.randint(100, 1000)
+        testDrawer = GridDrawer(0, 10, VALID_DATA)
+        self.assertEqual(testDrawer.draw_grid(width, height), [])
 
     def test_negative_cell_size(self):
         self.assertRaisesRegex(

@@ -39,7 +39,7 @@ class GridDrawer:
 
     @line_width.setter
     def line_width(self, value):
-        if value <= 0:
+        if value < 0:
             raise ValueError(f"Invalid line_width: {value}")
         else:
             self._line_width = value

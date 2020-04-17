@@ -20,7 +20,13 @@ A place to mess around with cellular automata
     pip install -r requirements.txt
     ```
 
-3. You're done!
+3. [OPTIONAL] Install developer requirements
+
+    ``` sh
+    pip install -r dev-requirements.txt
+    ```
+
+4. You're done!
 
 ## Quickstart
 

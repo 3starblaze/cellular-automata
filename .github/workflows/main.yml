@@ -12,6 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run tests and formatter
       run: |
+        apt install freeglut3-dev # Dependency for OpenGL, which is used by pyglet 
         pip3 install -r requirements.txt
         pip3 install -r dev-requirements.txt
         python3 -m pytest

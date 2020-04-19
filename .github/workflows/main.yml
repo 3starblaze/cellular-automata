@@ -1,9 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ development ]
@@ -15,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
     - name: Run tests and formatter
       run: |
+        apt install freeglut3-dev # Dependency for OpenGL, which is used by pyglet 
         pip3 install -r requirements.txt
         pip3 install -r dev-requirements.txt
         python3 -m pytest

@@ -15,4 +15,4 @@ jobs:
         pip3 install -r requirements.txt
         pip3 install -r dev-requirements.txt
         python3 -m pytest -k "not test_Controller.py"
-        black --check .
+        python3 -m black --check .

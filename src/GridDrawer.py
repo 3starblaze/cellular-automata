@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image, ImageDraw
 
 
 class GridDrawer:
@@ -137,3 +138,18 @@ class GridDrawer:
             cell_blocks.append((*point1, *point2, *point3, *point4))
 
         return cell_blocks
+
+    # Draw and make image with pillow
+    def draw(self, width, height):
+        img = Image.new("RGB", (width, height))
+        draw = ImageDraw.Draw(img)
+
+        [
+            draw.polygon(coords, fill=self.grid_line_color)
+            for coords in self.draw_grid(width, height)
+        ]
+        [
+            draw.polygon(coords, fill=self.grid_cell_color)
+            for coords in self.draw_cells()
+        ]
+        img.save("./preview_image.png")

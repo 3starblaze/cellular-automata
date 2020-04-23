@@ -141,15 +141,21 @@ class GridDrawer:
 
     # Draw and make image with pillow
     def draw(self, width, height):
+        def flip_coord(coord):
+            coord = list(coord)
+            for i in range(0, len(coord), 2):
+                coord[i+1] = height - coord[i+1]
+            return tuple(coord)
+
         img = Image.new("RGB", (width, height))
         draw = ImageDraw.Draw(img)
 
         [
-            draw.polygon(coords, fill=self.grid_line_color)
+            draw.polygon(flip_coord(coords), fill=self.grid_line_color)
             for coords in self.draw_grid(width, height)
         ]
         [
-            draw.polygon(coords, fill=self.grid_cell_color)
+            draw.polygon(flip_coord(coords), fill=self.grid_cell_color)
             for coords in self.draw_cells()
         ]
         img.save("./preview_image.png")

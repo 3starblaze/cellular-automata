@@ -107,15 +107,11 @@ class GridDrawer:
         grid_lines = []
         # Horizontal lines
         for i in range(0, height, self.cell_size + self.line_width):
-            grid_lines.append(
-                (0, i, 0, i + self.line_width, width, i + self.line_width, width, i)
-            )
+            self._drawn_data[0:width, i : i + self.line_width] = self.grid_line_color
 
         # Vertical lines
         for i in range(0, width, self.cell_size + self.line_width):
-            grid_lines.append(
-                (i, 0, i, height, i + self.line_width, height, i + self.line_width, 0)
-            )
+            self._drawn_data[i : i + self.line_width, 0:height] = self.grid_line_color
 
         return grid_lines
 

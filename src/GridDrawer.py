@@ -144,7 +144,7 @@ class GridDrawer:
         def flip_coord(coord):
             coord = list(coord)
             for i in range(0, len(coord), 2):
-                coord[i+1] = height - coord[i+1]
+                coord[i + 1] = height - coord[i + 1]
             return tuple(coord)
 
         img = Image.new("RGB", (width, height))

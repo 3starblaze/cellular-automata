@@ -33,6 +33,7 @@ class GridDrawer:
         self.data = data
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
+        self._drawn_data = np.array([])
 
     @property
     def line_width(self):
@@ -139,23 +140,9 @@ class GridDrawer:
 
         return cell_blocks
 
-    # Draw and make image with pillow
     def draw(self, width, height):
-        def flip_coord(coord):
-            coord = list(coord)
-            for i in range(0, len(coord), 2):
-                coord[i + 1] = height - coord[i + 1]
-            return tuple(coord)
+        self._drawn_data = np.array(width, height, 3)
 
-        img = Image.new("RGB", (width, height))
-        draw = ImageDraw.Draw(img)
-
-        [
-            draw.polygon(flip_coord(coords), fill=self.grid_line_color)
-            for coords in self.draw_grid(width, height)
-        ]
-        [
-            draw.polygon(flip_coord(coords), fill=self.grid_cell_color)
-            for coords in self.draw_cells()
-        ]
-        img.save("./preview_image.png")
+        # draw_lines(width, height)
+        # draw_cells()
+        # return self._drawn_data

@@ -117,17 +117,17 @@ class GridDrawer:
 
     def draw_cells(self):
         x, y = np.nonzero(self.data)
-        for i in len(x):
-            x1 = self.line_width * (x[i] + 1) + self.cell_size * x[i],
-            y1 = self.line_width * (y[i] + 1) + self.cell_size * y[i],
-            y1 = point1[0] + self.cell_size
-            y2 = point1[1] + self.cell_size
+        for i in range(len(x)):
+            x1 = self.line_width * (x[i] + 1) + self.cell_size * x[i]
+            y1 = self.line_width * (y[i] + 1) + self.cell_size * y[i]
+            x2 = x1 + self.cell_size
+            y2 = y1 + self.cell_size
 
             self._drawn_data[x1:x2, y1:y2] = self.grid_cell_color
 
     def draw(self, width, height):
-        self._drawn_data = np.array(width, height, 3)
+        self._drawn_data = np.zeros((width, height, 3))
+        self.draw_grid(width, height)
+        self.draw_cells()
 
-        # draw_lines(width, height)
-        # draw_cells()
-        # return self._drawn_data
+        return self._drawn_data

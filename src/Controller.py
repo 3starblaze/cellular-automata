@@ -22,24 +22,37 @@ class Controller:
         self.State = State
 
         self.window = pyglet.window.Window()
-        self._drawn_data = Drawer.draw(*self.window.get_size())
+        self._drawn_image = pyglet.image.create(*self.window.get_size())
+        self.drawn_data = Drawer.draw(*self.window.get_size())
 
         @self.window.event
         def on_draw():
             self.window.clear()
-            # data needs to be in ctype, otherwise can't be blitted
-            raw_data = (GLubyte * self._drawn_data.size)(
-                *self._drawn_data.swapaxes(0, 1).flatten().astype("int")
-            )
-            img = pyglet.image.ImageData(*self._drawn_data.shape[:2], "RGB", raw_data)
-            img.blit(0, 0)
+            self._drawn_image.blit(0, 0)
 
         @self.window.event
         def on_key_press(symbol, modifiers):
             if symbol == key.RIGHT:
                 State.apply_rules()
                 Drawer.data = State.data
-                self._drawn_data = Drawer.draw(*self.window.get_size())
+                self.drawn_data = Drawer.draw(*self.window.get_size())
+
+    def _update_image(self):
+        raw_data = (GLubyte * self._drawn_data.size)(
+            *self._drawn_data.swapaxes(0, 1).flatten().astype("int")
+        )
+        self._drawn_image = pyglet.image.ImageData(
+            *self._drawn_data.shape[:2], "RGB", raw_data
+        )
+
+    @property
+    def drawn_data(self):
+        return self._drawn_data
+
+    @drawn_data.setter
+    def drawn_data(self, value):
+        self._drawn_data = value
+        self._update_image()
 
     def run(self):
         pyglet.app.run()

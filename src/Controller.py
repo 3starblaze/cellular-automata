@@ -29,10 +29,9 @@ class Controller:
             self.window.clear()
             # data needs to be in ctype, otherwise can't be blitted
             raw_data = (GLubyte * self._drawn_data.size)(
-                *self._drawn_data.flatten().astype("int")
+                *self._drawn_data.swapaxes(0, 1).flatten().astype("int")
             )
-            y, x = self._drawn_data.shape[:2]
-            img = pyglet.image.ImageData(x, y, "RGB", raw_data)
+            img = pyglet.image.ImageData(*self._drawn_data.shape[:2], "RGB", raw_data)
             img.blit(0, 0)
 
         @self.window.event

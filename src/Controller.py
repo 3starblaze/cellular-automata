@@ -11,13 +11,8 @@ class Controller:
         if not issubclass(type(State), StateMaintainer):
             raise ValueError("State is not an instance of StateMaintainer!")
 
-        try:
-            if not callable(Drawer.draw_grid) or not callable(Drawer.draw_cells):
-                raise ValueError()
-        except (ValueError, AttributeError) as e:
-            raise ValueError(
-                "`Drawer` doesn't have callable functions `draw_grid` and/or `draw_cells`"
-            )
+        if not issubclass(type(Drawer), GridDrawer):
+            raise ValueError("Drawer is not an instance of GridDrawer!")
 
         self.State = State
 

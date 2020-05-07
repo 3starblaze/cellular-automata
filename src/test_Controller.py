@@ -37,20 +37,18 @@ class TestController(unittest.TestCase):
             {"draw_grid": False, "draw_cells": [2, 40, 41],},
         )
 
-    def test_object_with_variables_that_should_be_functions(self):
+    def test_object_with_functions(self):
         class Object(object):
             pass
 
         test_obj = Object()
         test_obj.draw_grid = lambda x: "hey"
         test_obj.draw_cells = lambda: "oh"
+        test_obj.draw = lambda a, b: a + b
 
-        try:
-            Controller(
-                VALID_STATE_MAINTAINER, test_obj,
-            )
-        except ValueError:
-            self.fail("Correct object raises an exception!")
+        self.assertRaisesRegex(
+            ValueError, "Drawer", Controller, VALID_STATE_MAINTAINER, test_obj
+        )
 
 
 if __name__ == "__main__":

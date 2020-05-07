@@ -124,6 +124,28 @@ class TestGridDrawer(unittest.TestCase):
             (43.92, 123.45, 92.2),
         )
 
+    def test_drawer(self):
+        # let's test 10x10, 2 line width, 4 cell size
+        data = [[1, 1, 0], [0, 1, 1], [1, 0, 1]]
+        line = (60, 70, 80)
+        cell = (10, 20, 30)
+        blank = (0, 0, 0)
+        width, height = (10, 12)
+        MyDrawer = GridDrawer(2, 4, data, line, cell)
+        expected = [
+            [line] * 12,
+            [line] * 12,
+            [line] * 2 + [cell] * 4 + [line] * 2 + [blank] * 4,
+            [line] * 2 + [cell] * 4 + [line] * 2 + [blank] * 4,
+            [line] * 2 + [cell] * 4 + [line] * 2 + [blank] * 4,
+            [line] * 2 + [cell] * 4 + [line] * 2 + [blank] * 4,
+            [line] * 12,
+            [line] * 12,
+            [line] * 2 + [cell] * 4 + [line] * 2 + [cell] * 4,
+            [line] * 2 + [cell] * 4 + [line] * 2 + [cell] * 4,
+        ]
+        np.testing.assert_equal(MyDrawer.draw(width, height), expected)
+
 
 if __name__ == "__main__":
     unittest.main()

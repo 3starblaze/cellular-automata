@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image, ImageDraw
 
 
 class GridDrawer:
@@ -32,6 +33,7 @@ class GridDrawer:
         self.data = data
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
+        self._drawn_data = np.array([])
 
     @property
     def line_width(self):
@@ -102,40 +104,27 @@ class GridDrawer:
             self._grid_cell_color = value
 
     def draw_grid(self, width, height):
-        if self.line_width == 0:
-            return []
-        grid_lines = []
         # Horizontal lines
         for i in range(0, height, self.cell_size + self.line_width):
-            grid_lines.append(
-                (0, i, 0, i + self.line_width, width, i + self.line_width, width, i)
-            )
+            self._drawn_data[0:width, i : i + self.line_width] = self.grid_line_color
 
         # Vertical lines
         for i in range(0, width, self.cell_size + self.line_width):
-            grid_lines.append(
-                (i, 0, i, height, i + self.line_width, height, i + self.line_width, 0)
-            )
-
-        return grid_lines
+            self._drawn_data[i : i + self.line_width, 0:height] = self.grid_line_color
 
     def draw_cells(self):
-        starting_points = []
-        for i, row in enumerate(self.data):
-            for j, elem in enumerate(row):
-                if elem:
-                    starting_points.append((j, i))
+        x, y = np.nonzero(self.data)
+        for i in range(len(x)):
+            x1 = self.line_width * (x[i] + 1) + self.cell_size * x[i]
+            y1 = self.line_width * (y[i] + 1) + self.cell_size * y[i]
+            x2 = x1 + self.cell_size
+            y2 = y1 + self.cell_size
 
-        cell_blocks = []
-        for x, y in starting_points:
-            point1 = (
-                self.line_width * (x + 1) + self.cell_size * x,
-                self.line_width * (y + 1) + self.cell_size * y,
-            )
-            point2 = (point1[0] + self.cell_size, point1[1])
-            point3 = (point2[0], point2[1] + self.cell_size)
-            point4 = (point3[0] - self.cell_size, point3[1])
+            self._drawn_data[x1:x2, y1:y2] = self.grid_cell_color
 
-            cell_blocks.append((*point1, *point2, *point3, *point4))
+    def draw(self, width, height):
+        self._drawn_data = np.zeros((width, height, 3))
+        self.draw_grid(width, height)
+        self.draw_cells()
 
-        return cell_blocks
+        return self._drawn_data

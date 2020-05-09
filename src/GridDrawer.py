@@ -104,7 +104,6 @@ class GridDrawer:
             self._grid_cell_color = value
 
     def draw_grid(self, width, height):
-        grid_lines = []
         # Horizontal lines
         for i in range(0, height, self.cell_size + self.line_width):
             self._drawn_data[0:width, i : i + self.line_width] = self.grid_line_color
@@ -112,8 +111,6 @@ class GridDrawer:
         # Vertical lines
         for i in range(0, width, self.cell_size + self.line_width):
             self._drawn_data[i : i + self.line_width, 0:height] = self.grid_line_color
-
-        return grid_lines
 
     def draw_cells(self):
         x, y = np.nonzero(self.data)

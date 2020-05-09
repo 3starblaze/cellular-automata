@@ -1,0 +1,18 @@
+name: CI
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests and formatter
+      run: |
+        pip3 install -r requirements.txt
+        pip3 install -r dev-requirements.txt
+        python3 -m pytest -k "not test_Controller.py"
+        python3 -m black --check .

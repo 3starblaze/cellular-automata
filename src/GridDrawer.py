@@ -1,6 +1,18 @@
 import numpy as np
 
 
+class Util:
+    @staticmethod
+    def validate_color(color):
+        return (
+            isinstance(color, tuple)
+            and len(color) == 3
+            and min(color) >= 0
+            and max(color) <= 255
+            and all(x % 1 == 0 for x in color)
+        )
+
+
 class GridDrawer:
     """Draw 2-D data in a grid."""
 
@@ -11,6 +23,7 @@ class GridDrawer:
         data,
         grid_line_color=(0, 100, 100),
         grid_cell_color=(114, 109, 168),
+        dead_cell_color=(0, 0, 0),
     ):
         """
         Parameters
@@ -32,6 +45,7 @@ class GridDrawer:
         self.data = data
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
+        self.dead_cell_color = dead_cell_color
 
     @property
     def line_width(self):
@@ -73,13 +87,7 @@ class GridDrawer:
 
     @grid_line_color.setter
     def grid_line_color(self, value):
-        if (
-            not isinstance(value, tuple)
-            or len(value) != 3
-            or min(value) < 0
-            or max(value) > 255
-            or any(x % 1 != 0 for x in value)
-        ):
+        if not Util.validate_color(value):
             raise ValueError(f"Invalid grid_line_color format: {value}")
         else:
             self._grid_line_color = value
@@ -90,14 +98,19 @@ class GridDrawer:
 
     @grid_cell_color.setter
     def grid_cell_color(self, value):
-        if (
-            not isinstance(value, tuple)
-            or len(value) != 3
-            or min(value) < 0
-            or max(value) > 255
-            or any(x % 1 != 0 for x in value)
-        ):
+        if not Util.validate_color(value):
             raise ValueError(f"Invalid grid_cell_color format: {value}")
+        else:
+            self._grid_cell_color = value
+
+    @property
+    def dead_cell_color(self):
+        return self._dead_cell_color
+
+    @dead_cell_color.setter
+    def dead_cell_color(self, value):
+        if not Util.validate_color(value):
+            raise ValueError(f"Invalid dead_cell_color format: {value}")
         else:
             self._grid_cell_color = value
 

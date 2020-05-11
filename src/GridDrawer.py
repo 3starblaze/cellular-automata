@@ -104,6 +104,8 @@ class GridDrawer:
             self._grid_cell_color = value
 
     def draw_grid(self, width, height):
+        if self.line_width == 0:
+            return
         # Horizontal lines
         for i in range(0, height, self.cell_size + self.line_width):
             self._drawn_data[0:width, i : i + self.line_width] = self.grid_line_color

@@ -1,6 +1,6 @@
 import pyglet
 from pyglet.window import key
-from pyglet.gl import GL_QUADS
+from pyglet.gl import GL_QUADS, GLubyte
 
 from GridDrawer import GridDrawer
 from StateMaintainer import StateMaintainer
@@ -11,41 +11,43 @@ class Controller:
         if not issubclass(type(State), StateMaintainer):
             raise ValueError("State is not an instance of StateMaintainer!")
 
-        try:
-            if not callable(Drawer.draw_grid) or not callable(Drawer.draw_cells):
-                raise ValueError()
-        except (ValueError, AttributeError) as e:
-            raise ValueError(
-                "`Drawer` doesn't have callable functions `draw_grid` and/or `draw_cells`"
-            )
+        if not issubclass(type(Drawer), GridDrawer):
+            raise ValueError("Drawer is not an instance of GridDrawer!")
 
         self.State = State
 
         self.window = pyglet.window.Window()
+        self._drawn_image = pyglet.image.create(*self.window.get_size())
+        self.drawn_data = Drawer.draw(*self.window.get_size())
 
         @self.window.event
         def on_draw():
             self.window.clear()
-            for line_tuple in Drawer.draw_grid(*self.window.get_size()):
-                pyglet.graphics.draw(
-                    4,
-                    GL_QUADS,
-                    ("v2i", line_tuple),
-                    ("c3B", Drawer.grid_line_color * 4),
-                )
-            for cell_block in Drawer.draw_cells():
-                pyglet.graphics.draw(
-                    4,
-                    GL_QUADS,
-                    ("v2i", cell_block),
-                    ("c3B", Drawer.grid_cell_color * 4),
-                )
+            self._drawn_image.blit(0, 0)
 
         @self.window.event
         def on_key_press(symbol, modifiers):
             if symbol == key.RIGHT:
                 State.apply_rules()
                 Drawer.data = State.data
+                self.drawn_data = Drawer.draw(*self.window.get_size())
+
+    def _update_image(self):
+        raw_data = (GLubyte * self._drawn_data.size)(
+            *self._drawn_data.swapaxes(0, 1).flatten().astype("int")
+        )
+        self._drawn_image = pyglet.image.ImageData(
+            *self._drawn_data.shape[:2], "RGB", raw_data
+        )
+
+    @property
+    def drawn_data(self):
+        return self._drawn_data
+
+    @drawn_data.setter
+    def drawn_data(self, value):
+        self._drawn_data = value
+        self._update_image()
 
     def run(self):
         pyglet.app.run()

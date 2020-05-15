@@ -36,10 +36,12 @@ class GridDrawer:
         data : array_like
             2-D array of values that will be drawn by GridDrawer.
         grid_line_color: tuple of ints, optional
-             Grid line color in 3 element RGB tuple.
+            Grid line color in 3 element RGB tuple.
         grid_cell_color: tuple of ints, optional
-             Color of cells in 3 element RGB tuple that are represented by
-             `true` in data.
+            Color of cells in 3 element RGB tuple that are represented by
+            `true` in data.
+        dead_cell_color: tuple of ints, optional
+            Color of cells that are not alive.
         """
         self.line_width = line_width
         self.cell_size = cell_size

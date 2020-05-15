@@ -114,7 +114,7 @@ class GridDrawer:
         if not Util.validate_color(value):
             raise ValueError(f"Invalid dead_cell_color format: {value}")
         else:
-            self._grid_cell_color = value
+            self._dead_cell_color = value
 
     def draw_grid(self, width, height):
         if self.line_width == 0:

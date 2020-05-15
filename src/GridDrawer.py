@@ -138,7 +138,7 @@ class GridDrawer:
             self._drawn_data[x1:x2, y1:y2] = self.grid_cell_color
 
     def draw(self, width, height):
-        self._drawn_data = np.zeros((width, height, 3))
+        self._drawn_data = np.full((width, height, 3), self.dead_cell_color)
         self.draw_grid(width, height)
         self.draw_cells()
 

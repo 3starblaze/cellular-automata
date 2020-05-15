@@ -2,6 +2,18 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 
+class Util:
+    @staticmethod
+    def validate_color(color):
+        return (
+            isinstance(color, tuple)
+            and len(color) == 3
+            and min(color) >= 0
+            and max(color) <= 255
+            and all(x % 1 == 0 for x in color)
+        )
+
+
 class GridDrawer:
     """Draw 2-D data in a grid."""
 
@@ -12,6 +24,7 @@ class GridDrawer:
         data,
         grid_line_color=(0, 100, 100),
         grid_cell_color=(114, 109, 168),
+        dead_cell_color=(0, 0, 0),
     ):
         """
         Parameters
@@ -23,16 +36,19 @@ class GridDrawer:
         data : array_like
             2-D array of values that will be drawn by GridDrawer.
         grid_line_color: tuple of ints, optional
-             Grid line color in 3 element RGB tuple.
+            Grid line color in 3 element RGB tuple.
         grid_cell_color: tuple of ints, optional
-             Color of cells in 3 element RGB tuple that are represented by
-             `true` in data.
+            Color of cells in 3 element RGB tuple that are represented by
+            `true` in data.
+        dead_cell_color: tuple of ints, optional
+            Color of cells that are not alive.
         """
         self.line_width = line_width
         self.cell_size = cell_size
         self.data = data
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
+        self.dead_cell_color = dead_cell_color
         self._drawn_data = np.array([])
 
     @property
@@ -75,13 +91,7 @@ class GridDrawer:
 
     @grid_line_color.setter
     def grid_line_color(self, value):
-        if (
-            not isinstance(value, tuple)
-            or len(value) != 3
-            or min(value) < 0
-            or max(value) > 255
-            or any(x % 1 != 0 for x in value)
-        ):
+        if not Util.validate_color(value):
             raise ValueError(f"Invalid grid_line_color format: {value}")
         else:
             self._grid_line_color = value
@@ -92,16 +102,21 @@ class GridDrawer:
 
     @grid_cell_color.setter
     def grid_cell_color(self, value):
-        if (
-            not isinstance(value, tuple)
-            or len(value) != 3
-            or min(value) < 0
-            or max(value) > 255
-            or any(x % 1 != 0 for x in value)
-        ):
+        if not Util.validate_color(value):
             raise ValueError(f"Invalid grid_cell_color format: {value}")
         else:
             self._grid_cell_color = value
+
+    @property
+    def dead_cell_color(self):
+        return self._dead_cell_color
+
+    @dead_cell_color.setter
+    def dead_cell_color(self, value):
+        if not Util.validate_color(value):
+            raise ValueError(f"Invalid dead_cell_color format: {value}")
+        else:
+            self._dead_cell_color = value
 
     def draw_grid(self, width, height):
         if self.line_width == 0:
@@ -125,7 +140,7 @@ class GridDrawer:
             self._drawn_data[x1:x2, y1:y2] = self.grid_cell_color
 
     def draw(self, width, height):
-        self._drawn_data = np.zeros((width, height, 3))
+        self._drawn_data = np.full((width, height, 3), self.dead_cell_color)
         self.draw_grid(width, height)
         self.draw_cells()
 

@@ -1,6 +1,7 @@
 import pyglet
 from pyglet.window import key
 from pyglet.gl import GL_QUADS, GLubyte
+import numpy as np
 
 from GridDrawer import GridDrawer
 from StateMaintainer import StateMaintainer
@@ -31,6 +32,18 @@ class Controller:
                 State.apply_rules()
                 Drawer.data = State.data
                 self.drawn_data = Drawer.draw(*self.window.get_size())
+
+        @self.window.event
+        def on_mouse_press(x, y, button, modifiers):
+            # Check if not line
+            if np.array_equal(self.drawn_data[x, y], Drawer.grid_line_color):
+                return
+            x_cell = x // (Drawer.line_width + Drawer.cell_size)
+            y_cell = y // (Drawer.line_width + Drawer.cell_size)
+            if x_cell < self.State.data.shape[1] and y_cell < self.State.data.shape[0]:
+                self.State.data[y_cell, x_cell] = not self.State.data[y_cell, x_cell]
+            Drawer.data = State.data
+            self.drawn_data = Drawer.draw(*self.window.get_size())
 
     def _update_image(self):
         raw_data = (GLubyte * self._drawn_data.size)(

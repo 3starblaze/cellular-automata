@@ -49,7 +49,7 @@ class GridDrawer:
         self.grid_line_color = grid_line_color
         self.grid_cell_color = grid_cell_color
         self.dead_cell_color = dead_cell_color
-        self._drawn_data = np.array([])
+        self._drawing_payload = {}
 
     @property
     def line_width(self):
@@ -121,27 +121,35 @@ class GridDrawer:
     def draw_grid(self, width, height):
         if self.line_width == 0:
             return
+
+        lines = []
         # Horizontal lines
         for i in range(0, height, self.cell_size + self.line_width):
-            self._drawn_data[0:width, i : i + self.line_width] = self.grid_line_color
+            lines.append({"coord": [0, i, width, i + self.line_width]})
 
         # Vertical lines
         for i in range(0, width, self.cell_size + self.line_width):
-            self._drawn_data[i : i + self.line_width, 0:height] = self.grid_line_color
+            lines.append({"coord": [i, 0, i + self.line_width, height]})
+
+        self._drawing_payload["lines"] = lines
 
     def draw_cells(self):
-        x, y = np.nonzero(self.data)
-        for i in range(len(x)):
-            x1 = self.line_width * (x[i] + 1) + self.cell_size * x[i]
-            y1 = self.line_width * (y[i] + 1) + self.cell_size * y[i]
-            x2 = x1 + self.cell_size
-            y2 = y1 + self.cell_size
+        cells = []
+        for x in range(self.data.shape[0]):
+            for y in range(self.data.shape[1]):
+                x1 = self.line_width * (x + 1) + self.cell_size * x
+                y1 = self.line_width * (y + 1) + self.cell_size * y
+                x2 = x1 + self.cell_size
+                y2 = y1 + self.cell_size
 
-            self._drawn_data[x1:x2, y1:y2] = self.grid_cell_color
+                cells.append(
+                    {"coord": [x1, y1, x2, y2], "state": self.data[x, y],}
+                )
+
+        self._drawing_payload["cells"] = cells
 
     def draw(self, width, height):
-        self._drawn_data = np.full((width, height, 3), self.dead_cell_color)
         self.draw_grid(width, height)
         self.draw_cells()
 
-        return self._drawn_data
+        return self._drawing_payload

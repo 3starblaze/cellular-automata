@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -133,10 +134,19 @@ class GridDrawer:
 
         self._drawing_payload["lines"] = lines
 
-    def draw_cells(self):
+    def draw_cells(self, width, height):
         cells = []
-        for x in range(self.data.shape[0]):
-            for y in range(self.data.shape[1]):
+        # Calculate max values (same formula as in loop below)
+        x_max = min(
+            self.data.shape[0],
+            math.ceil((width - self.line_width) / (self.line_width + self.cell_size)),
+        )
+        y_max = min(
+            self.data.shape[1],
+            math.ceil((height - self.line_width) / (self.line_width + self.cell_size)),
+        )
+        for x in range(x_max):
+            for y in range(y_max):
                 x1 = self.line_width * (x + 1) + self.cell_size * x
                 y1 = self.line_width * (y + 1) + self.cell_size * y
                 x2 = x1 + self.cell_size
@@ -150,6 +160,6 @@ class GridDrawer:
 
     def draw(self, width, height):
         self.draw_grid(width, height)
-        self.draw_cells()
+        self.draw_cells(width, height)
 
         return self._drawing_payload

@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 
 from Rule import Rule
 
@@ -20,6 +21,11 @@ GAME_OF_LIFE_INDICES = [
     (0, -1),
     (1, -1),
 ]
+
+
+def test_indices_getter():
+    rule = Rule(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET)
+    assert np.array_equal(rule.indices, GAME_OF_LIFE_INDICES)
 
 
 def test_misshapen_indices_1():
@@ -49,3 +55,18 @@ def test_wrong_data_type_for_indices():
 
     with pytest.raises(ValueError):
         Rule(indices, GAME_OF_LIFE_RULESET)
+
+
+def test_ruleset_getter():
+    rule = Rule(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET)
+    assert rule.ruleset == GAME_OF_LIFE_RULESET
+
+
+def test_wrong_data_type_for_ruleset():
+    with pytest.raises(ValueError):
+        Rule(GAME_OF_LIFE_INDICES, "fun")
+
+
+def test_ruleset_with_2_parameters():
+    Rule(GAME_OF_LIFE_INDICES, lambda cell, values: cell and values)
+    assert True

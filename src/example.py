@@ -20,5 +20,5 @@ GAME_OF_LIFE = {
 
 MyState = StateMaintainer(my_list, GAME_OF_LIFE)
 MyDrawer = GridDrawer(2, 30, MyState.data)
-MyController = Controller(MyState, MyDrawer, 10)
+MyController = Controller(MyState, MyDrawer)
 MyController.run()

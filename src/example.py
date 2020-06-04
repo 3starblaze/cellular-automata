@@ -5,7 +5,7 @@ from Controller import Controller
 import numpy as np
 import random
 
-my_list = np.array([random.choice([1, 0]) for i in range(20**2)]).reshape(20, 20)
+my_list = np.array([random.choice([1, 0]) for i in range(20 ** 2)]).reshape(20, 20)
 
 
 def GAME_OF_LIFE_RULESET(cell, values):

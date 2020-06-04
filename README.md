@@ -2,6 +2,8 @@
 
 A place to mess around with cellular automata
 
+![](./README-assets/preview.gif)
+
 ## Table of Contents
 * **[Installation](#installation)**
 * **[Quickstart](#quickstart)**
@@ -14,19 +16,25 @@ A place to mess around with cellular automata
     cd cellular-automata/
     ```
 
-2. Install requirements
+2. Create and activate venv
+   ```sh
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
+3. Install requirements
 
     ``` sh
     pip install -r requirements.txt
     ```
 
-3. [OPTIONAL] Install developer requirements
+4. [OPTIONAL] Install developer requirements
 
     ``` sh
     pip install -r dev-requirements.txt
     ```
 
-4. You're done!
+5. You're done!
 
 ## Quickstart
 
@@ -118,7 +126,7 @@ Starting your project is easy.
     To advance your simulation, press right arrow ➡️!
     ![](./README-assets/example-2.png)
 
-    Keep in mind that just because you don't see some cells, doesn't mean they don't exist. Observe the right side. There's             an empty column and this column won't be updated. There are also few invisible cells that go up.
+    Keep in mind that just because you don't see some cells, doesn't mean they don't exist. Observe the right side. There's             an empty column and this column won't be updated. There are also few invisible cells that go up. These instructions are also put together in [example.py](src/example.py). It's a bit more verbose but does the same thing.
 
 
     And that's about it. I know that's not much, but it's something. New features will await.

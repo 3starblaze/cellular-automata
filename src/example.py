@@ -2,6 +2,9 @@ from StateMaintainer import StateMaintainer
 from GridDrawer import GridDrawer
 from Controller import Controller
 
+import numpy as np
+import random
+
 my_list = np.array([random.choice([1, 0]) for i in range(20**2)]).reshape(20, 20)
 
 

@@ -1,6 +1,7 @@
 # cellular-automata
 
 A place to mess around with cellular automata
+
 ![](./README-assets/preview.gif)
 
 ## Table of Contents

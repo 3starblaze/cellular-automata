@@ -8,3 +8,6 @@ Right now we use `black` and `pytest`. To push a change, code needs to be format
 
 # Project status
 Current things can be seen in "Issues" and "Pull Requests" and the [Main](https://github.com/3starblaze/cellular-automata/projects/2) project board, which includes features that are planned to be included soon.
+
+# Things to keep in mind
+Follow commit message creation guidelines [here](https://chris.beams.io/posts/git-commit/). It contains 7 simple guidelines with explanation.

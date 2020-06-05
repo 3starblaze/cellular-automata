@@ -70,3 +70,8 @@ def test_wrong_data_type_for_ruleset():
 def test_ruleset_with_2_parameters():
     Rule(GAME_OF_LIFE_INDICES, lambda cell, values: cell and values)
     assert True
+
+
+def test_rule_with_ruleset_that_operates_on_explicit_indices():
+    Rule(GAME_OF_LIFE_INDICES, lambda cell, values: values[6])
+    assert True

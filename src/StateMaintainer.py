@@ -1,35 +1,22 @@
 import numpy as np
 
+from Rule import Rule
+
 
 class StateMaintainer:
     """Store 2d cell data and apply rule functions to data."""
 
-    def __init__(self, data, rules):
+    def __init__(self, data, rule):
         """
         Parameters
         ----------
         data : array_like
             Grid with cell values. Must be 2-D.
-        rules : object
-            indices : array_like
-                List of relative indices that will be retrieved in rule applying
-                process. Must be 2-D with shape of (_, 2).
-            ruleset : function
-                Parameters
-                ----------
-                cell : bool
-                    Value of the selected cell.
-                retrieved_cells : array_like
-                    Array of bools, representing cell values retrieved using
-                    `indices` array. Same 1-D size as `indices`.
-
-                Returns
-                -------
-                bool
-                    Final value of the cell after applying a rule.
+        rule : Rule
+            Rules that are going to be applied to data.
         """
         self.data = data
-        self.rules = rules
+        self.rule = rule
 
     @property
     def data(self):
@@ -44,38 +31,20 @@ class StateMaintainer:
         self._data = temp_data
 
     @property
-    def rules(self):
-        return self._rules
+    def rule(self):
+        return self._rule
 
-    @rules.setter
-    def rules(self, value):
-        # indices
-        if not "indices" in value:
-            raise ValueError("'rules' is missing 'indices'!")
-        value["indices"] = np.array(value["indices"])
+    @rule.setter
+    def rule(self, value):
+        if not issubclass(type(value), Rule):
+            raise ValueError("`rule` is not an instance of `Rule`")
+        self._rule = value
 
-        if value["indices"].ndim != 2 or value["indices"].shape[1] != 2:
-            raise ValueError("Misshapen 'indices'!")
-        if value["indices"].dtype != "int64":
-            raise ValueError("Invalid data type for 'indices'")
-
-        # ruleset
-        if not "ruleset" in value:
-            raise ValueError("'rules' is missing 'ruleset'!")
-        if not callable(value["ruleset"]):
-            raise ValueError("Ruleset is not callable!")
-        try:
-            value["ruleset"](True, [True] * len(value["indices"]))
-        except TypeError:
-            raise ValueError("Ruleset doesn't accept 2 arguments!")
-
-        self._rules = {"indices": value["indices"], "ruleset": value["ruleset"]}
-
-    def apply_rules(self):
+    def apply_rule(self):
         """Use ruleset function on data and update data."""
 
         def relative_to_absolute_coord(cur_x, cur_y):
-            return [(cur_x + xi, cur_y + yi) for xi, yi in self.rules["indices"]]
+            return [(cur_x + xi, cur_y + yi) for xi, yi in self.rule.indices]
 
         def coordinates_in_bounds(x, y):
             if min(x, y) < 0:
@@ -96,7 +65,7 @@ class StateMaintainer:
                 else:
                     values_from_coords.append(self.data[xi, yi])
 
-            new_data[it.multi_index] = self.rules["ruleset"](it[0], values_from_coords)
+            new_data[it.multi_index] = self.rule.ruleset(it[0], values_from_coords)
             it.iternext()
 
         self.data = new_data

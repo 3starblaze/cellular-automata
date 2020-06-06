@@ -1,6 +1,7 @@
 from StateMaintainer import StateMaintainer
 from GridDrawer import GridDrawer
 from Controller import Controller
+from Rule import Rule
 
 import numpy as np
 import random
@@ -15,10 +16,10 @@ def GAME_OF_LIFE_RULESET(cell, values):
         return sum(values) == 3
 
 
-GAME_OF_LIFE = {
-    "indices": [(-1, 1), (0, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)],
-    "ruleset": GAME_OF_LIFE_RULESET,
-}
+GAME_OF_LIFE = Rule(
+    [(-1, 1), (0, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)],
+    GAME_OF_LIFE_RULESET,
+)
 
 
 MyState = StateMaintainer(my_list, GAME_OF_LIFE)

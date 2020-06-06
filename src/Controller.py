@@ -56,7 +56,7 @@ class Controller:
         @self.window.event
         def on_key_press(symbol, modifiers):
             if symbol == key.RIGHT:
-                State.apply_rules()
+                State.apply_rule()
                 Drawer.data = State.data
 
         @self.window.event

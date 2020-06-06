@@ -50,6 +50,7 @@ Starting your project is easy.
     from StateMaintainer import StateMaintainer
     from GridDrawer import GridDrawer
     from Controller import Controller
+    from Rule import Rule
     ```
 
 3. Prepare data and ruleset
@@ -95,7 +96,7 @@ Starting your project is easy.
 
         Now we can make our `StateMaintainer`.
         ``` python
-        MyState = StateMaintainer(my_list, {"indices": indices, "ruleset": GAME_OF_LIFE_RULESET})
+        MyState = StateMaintainer(my_list, Rule(indices, GAME_OF_LIFE_RULESET))
         ```
 4. Stick together all this data
 

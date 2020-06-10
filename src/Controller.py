@@ -70,5 +70,6 @@ class Controller:
         self.drawing_data = self.drawer.draw(self.width, self.height)
 
     def next_frame(self):
+        """Apply the rule and update data accordingly."""
         StateMaintainer.apply_rule()
         self._update_data(StateMaintainer.data)

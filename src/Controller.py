@@ -8,13 +8,34 @@ from Rule import Rule
 class Controller:
     """Provide a simple interface for cellular automata simulations."""
 
-    def __init__(self, indices, ruleset, width=100, height=100, data=None):
+    def __init__(
+        self, indices, ruleset, width=100, height=100, data=np.zeros((10, 10))
+    ):
+        """
+        Parameters
+        ----------
+        indices : array_like
+            List of relative indices that will be retrieved in rule applying process. Must be 2-D with shape of (_, 2).
+        ruleset : function
+            Parameters
+            ----------
+            cell : bool
+                Value of the selected cell.
+            retrieved_cells : array_like
+                Array of bools, representing cell values retrieved using `indices` array. Same 1-D size as `indices`.
+
+            Returns
+            -------
+            bool
+                Final value of the cell after applying a rule.
+        width, height : int, optional
+            Drawing canvas size in pixels.
+        data : array_like, optional
+            Grid with cell values. Must be 2-D.
+        """
         self.width = width
         self.height = height
-        if not data:
-            self.data = np.zeros((10, 10))
-        else:
-            self.data = data
+        self.data = data
         self.state = StateMaintainer(self.data, Rule(indices, ruleset))
         self.drawer = GridDrawer(2, 30, self.data)
         self.drawing_data = {}

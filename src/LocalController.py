@@ -1,10 +1,8 @@
 import pyglet
 from pyglet.window import key
-from pyglet.gl import GL_QUADS, GLubyte
-import numpy as np
+from pyglet.gl import GL_QUADS
 
-from GridDrawer import GridDrawer
-from StateMaintainer import StateMaintainer
+from Controller import Controller
 
 
 class Util:
@@ -14,35 +12,35 @@ class Util:
 
 
 class LocalController:
-    def __init__(self, State, Drawer):
-        if not issubclass(type(State), StateMaintainer):
+    def __init__(self, controller):
+        if not issubclass(type(controller), Controller):
             raise ValueError("State is not an instance of StateMaintainer!")
 
-        if not issubclass(type(Drawer), GridDrawer):
-            raise ValueError("Drawer is not an instance of GridDrawer!")
-
-        self.State = State
-
+        self.controller = controller
         self.window = pyglet.window.Window()
 
         @self.window.event
         def on_draw():
             self.window.clear()
             batch = pyglet.graphics.Batch()
-            drawing_objects = Drawer.draw(*self.window.get_size())
+            # drawing_objects = Drawer.draw(*self.window.get_size())
+            w, h = self.window.get_size()
+            self.controller.width = w
+            self.controller.height = h
+            drawing_objects = self.controller.drawing_data
             for line in drawing_objects["lines"]:
                 batch.add(
                     4,
                     GL_QUADS,
                     None,
                     ("v2i", Util.corners_to_rect_coord(*line["coord"])),
-                    ("c3B", Drawer.grid_line_color * 4),
+                    ("c3B", self.controller.drawer.grid_line_color * 4),
                 )
             for cell in drawing_objects["cells"]:
                 if cell["state"]:
-                    current_color = Drawer.grid_cell_color
+                    current_color = self.controller.drawer.grid_cell_color
                 else:
-                    current_color = Drawer.dead_cell_color
+                    current_color = self.controller.drawer.dead_cell_color
 
                 batch.add(
                     4,
@@ -56,21 +54,26 @@ class LocalController:
         @self.window.event
         def on_key_press(symbol, modifiers):
             if symbol == key.RIGHT:
-                State.apply_rule()
-                Drawer.data = State.data
+                self.controller.next_frame()
 
         @self.window.event
         def on_mouse_press(x, y, button, modifiers):
+            line_width = self.controller.drawer.line_width
+            cell_size = self.controller.drawer.cell_size
             # Check if not line
-            if (x / (Drawer.line_width + Drawer.cell_size)) % 1 == 0 or (
-                y / (Drawer.line_width + Drawer.cell_size)
-            ) % 1 == 0:
+            if (x % (line_width + cell_size)) == 0 or (
+                y % (line_width + cell_size)
+            ) == 0:
                 return
-            x_cell = x // (Drawer.line_width + Drawer.cell_size)
-            y_cell = y // (Drawer.line_width + Drawer.cell_size)
-            if x_cell < self.State.data.shape[1] and y_cell < self.State.data.shape[0]:
-                self.State.data[y_cell, x_cell] = not self.State.data[y_cell, x_cell]
-            Drawer.data = State.data
+            x_cell = x // (line_width + cell_size)
+            y_cell = y // (line_width + cell_size)
+            if (
+                x_cell < self.controller.data.shape[1]
+                and y_cell < self.controller.data.shape[0]
+            ):
+                self.controller.data[y_cell, x_cell] = not self.controller.data[
+                    y_cell, x_cell
+                ]
 
     def run(self):
         pyglet.app.run()

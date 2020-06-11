@@ -35,10 +35,19 @@ class Controller:
         """
         self.width = width
         self.height = height
-        self.data = data
-        self.state = StateMaintainer(self.data, Rule(indices, ruleset))
-        self.drawer = GridDrawer(2, 30, self.data)
+        self.state = StateMaintainer(data, Rule(indices, ruleset))
+        self.drawer = GridDrawer(2, 30, data)
         self.drawing_data = {}
+        self.data = data
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, value):
+        self._data = value
+        self._update_data(value)
 
     @property
     def width(self):
@@ -71,5 +80,5 @@ class Controller:
 
     def next_frame(self):
         """Apply the rule and update data accordingly."""
-        StateMaintainer.apply_rule()
-        self._update_data(StateMaintainer.data)
+        self.state.apply_rule()
+        self.data = self.state.data

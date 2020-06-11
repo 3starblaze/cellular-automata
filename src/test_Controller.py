@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 
 from Controller import Controller
 
@@ -61,3 +62,17 @@ def test_float_height():
     with pytest.raises(ValueError) as excinfo:
         Controller(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET, height=92.3)
     assert "height" in str(excinfo.value)
+
+
+def test_ensure_drawing_data_presence():
+    controller = Controller(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET)
+    assert controller.drawing_data != {}
+
+
+def test_ensure_data_is_synced():
+    data = [[0, 1, 1], [1, 0, 1], [1, 1, 1]]
+    controller = Controller(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET, data=data)
+    controller.next_frame()
+    assert np.array_equal(controller.data, controller.state.data) and np.array_equal(
+        controller.state.data, controller.drawer.data
+    )

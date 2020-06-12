@@ -33,11 +33,13 @@ class Controller:
         data : array_like, optional
             Grid with cell values. Must be 2-D.
         """
-        self.width = width
-        self.height = height
         self.state = StateMaintainer(data, Rule(indices, ruleset))
         self.drawer = GridDrawer(2, 30, data)
-        self.drawing_data = {}
+        self._dimension_validator(width, "width")
+        self._width = width
+        self._dimension_validator(height, "height")
+        self._height = height
+        self.drawing_data = self.drawer.draw(self.width, self.height)
         self.data = data
 
     @property
@@ -55,11 +57,10 @@ class Controller:
 
     @width.setter
     def width(self, value):
-        if value <= 0:
-            raise ValueError("`width` is not positive!")
-        elif value % 1 != 0:
-            raise ValueError("`width` is not an integer")
+        self._dimension_validator(value, "width")
         self._width = value
+
+        self.drawing_data = self.drawer.draw(self.width, self.height)
 
     @property
     def height(self):
@@ -67,11 +68,16 @@ class Controller:
 
     @height.setter
     def height(self, value):
-        if value <= 0:
-            raise ValueError("`height` is not positive!")
-        elif value % 1 != 0:
-            raise ValueError("`height` is not an integer")
+        self._dimension_validator(value, "height")
         self._height = value
+
+        self.drawing_data = self.drawer.draw(self.width, self.height)
+
+    def _dimension_validator(self, value, name="dimension"):
+        if value <= 0:
+            raise ValueError(f"`{name}` is not positive!")
+        elif value % 1 != 0:
+            raise ValueError(f"`{name}` is not an integer")
 
     def _update_data(self, data):
         self.state.data = data

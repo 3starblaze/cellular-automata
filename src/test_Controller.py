@@ -1,3 +1,5 @@
+import copy
+
 import pytest
 import numpy as np
 
@@ -76,3 +78,17 @@ def test_ensure_data_is_synced():
     assert np.array_equal(controller.data, controller.state.data) and np.array_equal(
         controller.state.data, controller.drawer.data
     )
+
+
+def test_ensure_height_change_updates_drawing_data():
+    controller = Controller(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET, height=200)
+    previous_drawing_data = copy.deepcopy(controller.drawing_data)
+    controller.height = 400
+    assert previous_drawing_data != controller.drawing_data
+
+
+def test_ensure_width_change_updates_drawing_data():
+    controller = Controller(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET, width=100)
+    previous_drawing_data = copy.deepcopy(controller.drawing_data)
+    controller.width = 300
+    assert previous_drawing_data != controller.drawing_data

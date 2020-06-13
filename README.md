@@ -37,6 +37,7 @@ A place to mess around with cellular automata
 5. You're done!
 
 ## Quickstart
+**Notice:** This quickstart guide is stale and new one will come soon. For now, use [example-new.py](src/example-new.py)
 
 Starting your project is easy.
 

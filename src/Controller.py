@@ -1,76 +1,90 @@
-import pyglet
-from pyglet.window import key
-from pyglet.gl import GL_QUADS, GLubyte
 import numpy as np
 
-from GridDrawer import GridDrawer
 from StateMaintainer import StateMaintainer
-
-
-class Util:
-    @staticmethod
-    def corners_to_rect_coord(x1, y1, x2, y2):
-        return [x1, y1, x1, y2, x2, y2, x2, y1]
+from GridDrawer import GridDrawer
+from Rule import Rule
 
 
 class Controller:
-    def __init__(self, State, Drawer):
-        if not issubclass(type(State), StateMaintainer):
-            raise ValueError("State is not an instance of StateMaintainer!")
+    """Provide a simple interface for cellular automata simulations."""
 
-        if not issubclass(type(Drawer), GridDrawer):
-            raise ValueError("Drawer is not an instance of GridDrawer!")
+    def __init__(
+        self, indices, ruleset, width=100, height=100, data=np.zeros((10, 10))
+    ):
+        """
+        Parameters
+        ----------
+        indices : array_like
+            List of relative indices that will be retrieved in rule applying process. Must be 2-D with shape of (_, 2).
+        ruleset : function
+            Parameters
+            ----------
+            cell : bool
+                Value of the selected cell.
+            retrieved_cells : array_like
+                Array of bools, representing cell values retrieved using `indices` array. Same 1-D size as `indices`.
 
-        self.State = State
+            Returns
+            -------
+            bool
+                Final value of the cell after applying a rule.
+        width, height : int, optional
+            Drawing canvas size in pixels.
+        data : array_like, optional
+            Grid with cell values. Must be 2-D.
+        """
+        self.state = StateMaintainer(data, Rule(indices, ruleset))
+        self.drawer = GridDrawer(2, 30, data)
+        self._dimension_validator(width, "width")
+        self._width = width
+        self._dimension_validator(height, "height")
+        self._height = height
+        self.drawing_data = self.drawer.draw(self.width, self.height)
+        self.data = data
 
-        self.window = pyglet.window.Window()
+    @property
+    def data(self):
+        return self._data
 
-        @self.window.event
-        def on_draw():
-            self.window.clear()
-            batch = pyglet.graphics.Batch()
-            drawing_objects = Drawer.draw(*self.window.get_size())
-            for line in drawing_objects["lines"]:
-                batch.add(
-                    4,
-                    GL_QUADS,
-                    None,
-                    ("v2i", Util.corners_to_rect_coord(*line["coord"])),
-                    ("c3B", Drawer.grid_line_color * 4),
-                )
-            for cell in drawing_objects["cells"]:
-                if cell["state"]:
-                    current_color = Drawer.grid_cell_color
-                else:
-                    current_color = Drawer.dead_cell_color
+    @data.setter
+    def data(self, value):
+        self._data = value
+        self._update_data(value)
 
-                batch.add(
-                    4,
-                    GL_QUADS,
-                    None,
-                    ("v2i", Util.corners_to_rect_coord(*cell["coord"])),
-                    ("c3B", current_color * 4),
-                )
-            batch.draw()
+    @property
+    def width(self):
+        return self._width
 
-        @self.window.event
-        def on_key_press(symbol, modifiers):
-            if symbol == key.RIGHT:
-                State.apply_rule()
-                Drawer.data = State.data
+    @width.setter
+    def width(self, value):
+        self._dimension_validator(value, "width")
+        self._width = value
 
-        @self.window.event
-        def on_mouse_press(x, y, button, modifiers):
-            # Check if not line
-            if (x / (Drawer.line_width + Drawer.cell_size)) % 1 == 0 or (
-                y / (Drawer.line_width + Drawer.cell_size)
-            ) % 1 == 0:
-                return
-            x_cell = x // (Drawer.line_width + Drawer.cell_size)
-            y_cell = y // (Drawer.line_width + Drawer.cell_size)
-            if x_cell < self.State.data.shape[1] and y_cell < self.State.data.shape[0]:
-                self.State.data[y_cell, x_cell] = not self.State.data[y_cell, x_cell]
-            Drawer.data = State.data
+        self.drawing_data = self.drawer.draw(self.width, self.height)
 
-    def run(self):
-        pyglet.app.run()
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._dimension_validator(value, "height")
+        self._height = value
+
+        self.drawing_data = self.drawer.draw(self.width, self.height)
+
+    def _dimension_validator(self, value, name="dimension"):
+        if value <= 0:
+            raise ValueError(f"`{name}` is not positive!")
+        elif value % 1 != 0:
+            raise ValueError(f"`{name}` is not an integer")
+
+    def _update_data(self, data):
+        self.state.data = data
+        self.drawer.data = data
+        self.drawing_data = self.drawer.draw(self.width, self.height)
+
+    def next_frame(self):
+        """Apply the rule and update data accordingly."""
+        self.state.apply_rule()
+        self.data = self.state.data

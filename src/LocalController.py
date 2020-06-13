@@ -74,6 +74,8 @@ class LocalController:
                 self.controller.data[y_cell, x_cell] = not self.controller.data[
                     y_cell, x_cell
                 ]
+                # To force data update
+                self.controller.data = self.controller.data
 
     def run(self):
         pyglet.app.run()

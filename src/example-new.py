@@ -13,6 +13,16 @@ def GAME_OF_LIFE_RULESET(cell, values):
     else:
         return sum(values) == 3
 
-GAME_OF_LIFE_INDICES = [(-1, 1), (0, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)]
+
+GAME_OF_LIFE_INDICES = [
+    (-1, 1),
+    (0, 1),
+    (1, 1),
+    (-1, 0),
+    (1, 0),
+    (-1, -1),
+    (0, -1),
+    (1, -1),
+]
 
 LocalController(Controller(GAME_OF_LIFE_INDICES, GAME_OF_LIFE_RULESET)).run()

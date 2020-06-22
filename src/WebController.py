@@ -1,5 +1,6 @@
 from flask import Flask, request
 from Controller import Controller
+from Rule import Rule
 
 app = Flask(__name__)
 
@@ -12,9 +13,10 @@ def controller_route_handler():
     if request.method == "POST":
         data = request.get_json(force=True)
         try:
-            args = data.get("args") or []
             kwargs = data.get("kwargs") or {}
-            current_controller = Controller(*args, **kwargs)
+            ruleset_string = kwargs.get('ruleset')
+            kwargs["ruleset"] = Rule.string_to_ruleset(ruleset_string)
+            current_controller = Controller(**kwargs)
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": str(e)}

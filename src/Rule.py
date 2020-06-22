@@ -55,3 +55,13 @@ class Rule:
             raise ValueError("Ruleset doesn't accept 2 arguments!")
 
         self._ruleset = value
+
+    @staticmethod
+    def string_to_ruleset(ruleset_string):
+        # Indent
+        new_lines = ["    " + line for line in ruleset_string.splitlines()]
+        new_string = "\n".join(new_lines)
+        new_string = "def ruleset(cell, retrieved_cells):\n" + new_string
+
+        exec(compile(new_string, "<string>", "exec"), globals())
+        return ruleset

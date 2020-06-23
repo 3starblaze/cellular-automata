@@ -1,4 +1,4 @@
-from flask import Flask, request, Markup
+from flask import Flask, request, render_template
 from Controller import Controller
 from Rule import Rule
 
@@ -12,7 +12,7 @@ def controller_route_handler():
     global current_controller
     if request.method == "GET":
         if current_controller:
-            return Markup.escape(str(current_controller))
+            return render_template("controller.j2", controller=current_controller,)
         else:
             return "There is no controller at the moment!"
 

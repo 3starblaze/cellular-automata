@@ -26,3 +26,16 @@ def controller_route_handler():
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": str(e)}
+
+
+@app.route("/controller/update", methods=["POST"])
+def controller_access():
+    global current_controller
+    data = request.get_json(force=True)
+    try:
+        for k, v in data.items():
+            setattr(current_controller, k, v)
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+    return {"success": True}

@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+import numpy as np
 from Controller import Controller
 from Rule import Rule
 
@@ -26,6 +27,17 @@ def controller_route_handler():
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": str(e)}
+
+
+@app.route("/controller/<prop>", methods=["GET"])
+def controller_prop_route_handler(prop):
+    try:
+        value = getattr(current_controller, prop)
+        if isinstance(value, np.ndarray):
+            value = value.tolist()
+        return {"success": True, "prop": value}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 
 
 @app.route("/controller/update", methods=["POST"])

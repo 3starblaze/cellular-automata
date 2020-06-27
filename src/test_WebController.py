@@ -16,7 +16,12 @@ def controller_init(client):
     global current_controller
 
     indices = [[0, 1], [1, 0]]
-    ruleset_string = "if cell:\n    return 3 <= sum(retrieved_cells) <= 4\nelse:\n    return sum(retrieved_cells) == 3"
+    ruleset_string = (
+        "if cell:"
+        "    return 3 <= sum(retrieved_cells) <= 4"
+        "else:"
+        "    return sum(retrieved_cells) == 3"
+    )
     width = 467
 
     current_controller = Controller(

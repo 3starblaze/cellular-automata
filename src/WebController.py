@@ -29,10 +29,13 @@ def controller_route_handler():
             return {"success": False, "error": str(e)}
 
 
-@app.route("/controller/<prop>", methods=["GET"])
+@app.route("/controller/<path:prop>", methods=["GET"])
 def controller_prop_route_handler(prop):
     try:
-        value = getattr(current_controller, prop)
+        prop_chain = prop.split("/")
+        value = current_controller
+        for p in prop_chain:
+            value = getattr(value, p)
         if isinstance(value, np.ndarray):
             value = value.tolist()
         return {"success": True, "prop": value}

@@ -42,6 +42,13 @@ def test_prop_access(client, controller_init):
     assert client.get("/controller/data").get_json()["prop"] == [[0] * 10] * 10
 
 
+def test_nested_prop_access(client, controller_init):
+    res = client.get("/controller/drawer/line_width").get_json()
+    assert res["prop"] == 2
+    res = client.get("/controller/state/rule/indices").get_json()
+    assert res["prop"] == [[0, 1], [1, 0]]
+
+
 def test_prop_update(client, controller_init):
     assert (
         client.post("/controller/update", json={"height": 420}).get_json()["success"]

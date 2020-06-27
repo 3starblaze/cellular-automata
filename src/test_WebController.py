@@ -1,5 +1,7 @@
 import pytest
 
+from Rule import Rule
+from Controller import Controller
 from WebController import app as WebController
 
 
@@ -11,14 +13,19 @@ def client():
 
 @pytest.fixture
 def controller_init(client):
+    global current_controller
+
+    indices = [[0, 1], [1, 0]]
+    ruleset_string = "if cell:\n    return 3 <= sum(retrieved_cells) <= 4\nelse:\n    return sum(retrieved_cells) == 3"
+    width = 467
+
+    current_controller = Controller(
+        indices, Rule.string_to_ruleset(ruleset_string), width=width
+    )
     return client.post(
         "/controller",
         json={
-            "kwargs": {
-                "indices": [[0, 1], [1, 0]],
-                "ruleset": "if cell:\n    return 3 <= sum(retrieved_cells) <= 4\nelse:\n    return sum(retrieved_cells) == 3",
-                "width": 467,
-            }
+            "kwargs": {"indices": indices, "ruleset": ruleset_string, "width": width,}
         },
     )
 
@@ -38,20 +45,22 @@ def test_controller_creation(client, controller_init):
 
 
 def test_prop_access(client, controller_init):
-    assert client.get("/controller/width").get_json()["prop"] == 467
-    assert client.get("/controller/data").get_json()["prop"] == [[0] * 10] * 10
+    assert (
+        client.get("/controller/width").get_json()["prop"] == current_controller.width
+    )
+    assert (
+        client.get("/controller/data").get_json()["prop"]
+        == current_controller.data.tolist()
+    )
 
 
 def test_nested_prop_access(client, controller_init):
     res = client.get("/controller/drawer/line_width").get_json()
-    assert res["prop"] == 2
+    assert res["prop"] == current_controller.drawer.line_width
     res = client.get("/controller/state/rule/indices").get_json()
-    assert res["prop"] == [[0, 1], [1, 0]]
+    assert res["prop"] == current_controller.state.rule.indices.tolist()
 
 
 def test_prop_update(client, controller_init):
-    assert (
-        client.post("/controller/update", json={"height": 420}).get_json()["success"]
-        == True
-    )
+    assert client.post("/controller/update", json={"height": 420}).get_json()["success"]
     assert client.get("/controller/height").get_json()["prop"] == 420
